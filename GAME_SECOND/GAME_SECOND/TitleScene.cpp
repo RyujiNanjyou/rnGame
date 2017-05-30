@@ -22,14 +22,22 @@ void TitleScene::Init()
 void TitleScene::Update()
 {
 	pad.Update();
+	atime += deltaTime;
 	if (pad.IsTrigger(enButtonA))
 	{
-		SoundSource* se = new SoundSource;
-		se->Init("Assets/Sound/select08.wav");
-		se->Play(false);
-		se->SetVolume(1.0f);
-		scenemanager->ChangeScene(scenemanager->Scenes::GAME);
+		titlese.reset(new SoundSource);
+		titlese->Init("Assets/Sound/select08.wav");
+		titlese->Play(false);
+		titlese->SetVolume(0.8f);
+		
+		if (atime > 0.5f)
+		{
+			scenemanager->ChangeScene(scenemanager->Scenes::GAME);
+		}
 	}
+	
+		
+	
 }
 void TitleScene::Render()
 {

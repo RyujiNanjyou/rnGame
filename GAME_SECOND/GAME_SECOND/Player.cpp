@@ -6,6 +6,7 @@
 #include "BallCollision.h"
 #include "Player.h"
 
+
 namespace
 {
 	float  deltaTime = 1.0f / 60.0f;
@@ -31,6 +32,7 @@ deadstate(this)
 Player::~Player()
 {
 	Release();
+	
 }
 
 void Player::Init(LPDIRECT3DDEVICE9 pd3dDevice, const char* Name)
@@ -96,6 +98,7 @@ void Player::Animation()
 		}
 		else if (state == STATE_IDOL)
 		{
+
 			PlayAnimation(IDOL, 0.3f);
 		}
 		else if (state == STATE_DAMAGE)
@@ -228,6 +231,7 @@ void Player::ChangeState(NowState nexstate)
 
 void Player::ShotPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 forward)
 {
+	
 	if (shotintervalTime == 0)
 	{
 		Tama* tama = new Tama();
@@ -235,11 +239,11 @@ void Player::ShotPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 forward)
 		tama->Shot(pos, forward);
 		tama->Init(g_pd3dDevice, "Assets/Model/tama");
 		game->AddPlayerTama(tama);
-		SoundSource* se = new SoundSource;
-		se->Init("Assets/Sound/beam-gun01.wav");
-		se->Play(false);
-		se->SetVolume(0.1f);
-
+		
+		Attackse.reset(new SoundSource);
+		Attackse->Init("Assets/Sound/beam-gun01.wav");
+		Attackse->Play(false);
+		Attackse->SetVolume(0.1f);
 		shotintervalTime = 7;
 	}
 	shotintervalTime--;
@@ -282,7 +286,7 @@ void Player::Damage()
 			{
 				if (BallCollision(position, bosstama->Getpos(), radius, 0.25f))
 				{
-					hp -= 1;
+					hp -= 2;
 					if (hp <= 0.0f)
 					{
 						isApplyDeadTrigger = true;

@@ -6,6 +6,7 @@
 namespace
 {
 	const D3DXVECTOR3 Zero(0.0f, 0.0f, 0.0f);
+	const D3DXVECTOR3 Up(0.0f, 1.0f, 0.0f);
 	float angle = 0;
 }
 Boss::Boss()
@@ -20,7 +21,7 @@ Boss::Boss()
 
 Boss::~Boss()
 {
-
+	Release();
 }
 
 void Boss::Init(LPDIRECT3DDEVICE9 pd3dDevice, const char* Name)
@@ -51,21 +52,27 @@ void Boss::Damage()
 				intervalDamageTime = 0;
 			}
 		}
-	}
+	}	
 	if (hp <= 0.0f)
 	{
 		hp = 0;
-		characterController.RemoveRigidBoby();
-		comp = true;
 		nowbossS = NowBossState::BossSTATE_DEAD;
-		Drawflag = true;
+		
 	}
 	if (nowbossS == NowBossState::BossSTATE_DEAD)
 	{	
-		SoundSource* se = new SoundSource;
-		se->Init("Assets/Sound/bomb.wav");
-		se->Play(false);
-		se->SetVolume(5.0f);
+		/*deathse.reset(new SoundSource);
+		deathse->Init("Assets/Sound/bomb.wav");
+		deathse->Play(false);
+		deathse->SetVolume(0.8f);*/
+		Drawflag = true;
+		characterController.RemoveRigidBoby();
+		comp = true;
+		num += deltaTime;
+		if (num > 2.0f)
+		{
+			scenemanager->ChangeScene(scenemanager->TITLE);
+		}
 	}
 }
 
@@ -85,6 +92,7 @@ bool Boss::Update()
 		if (len < 5.0f)
 		{
 			moveSpeed = to * 0.7f;
+			rotation = SetRotation(Up, atan2f(to.x, to.z));
 			if (intervalTime == 0)
 			{
 				BossTama* tama = new BossTama();
@@ -97,11 +105,12 @@ bool Boss::Update()
 				tama->Shot(pos, dir);
 				tama->Init(g_pd3dDevice, "Assets/Model/tama");
 				game->AddBossTama(tama);
+				
+				bossAttackse.reset(new SoundSource);
+				bossAttackse->Init("Assets/Sound/beam-gun01.wav");
+				bossAttackse->Play(false);
+				bossAttackse->SetVolume(0.1f);
 
-				SoundSource* se = new SoundSource;
-				se->Init("Assets/Sound/beam-gun01.wav");
-				se->Play(false);
-				se->SetVolume(0.1f);
 				intervalTime = 7;
 			}
 			intervalTime--;

@@ -10,8 +10,8 @@
 GameScene* game;
 SceneManager* scenemanager;
 RenderTarget* rendertarget;
+SoundEngine* soundengine;
 Primitive*	quadPrimitive;			//四角形の板ポリプリミティブ。
-//SoundEngine* soundengine;
 LPD3DXEFFECT copyEffect;			//コピーを行うシェーダー。
 LPD3DXEFFECT monochromeEffect;		//モノクロフィルターをかけるシェーダー。
 //-----------------------------------------------------------------------------
@@ -203,12 +203,11 @@ void Init()
 	LoadShaders();
 
 	game = new GameScene;
-	
+
 	scenemanager = new SceneManager;
 	scenemanager->InitializeScene();
-
-	/*soundengine = new SoundEngine;
-	soundengine->Init();*/
+	soundengine = new SoundEngine;
+	soundengine->Init();
 
 }
 /*!-----------------------------------------------------------------------------
@@ -217,14 +216,13 @@ void Init()
 void Update()
 {
 	scenemanager->UpdateScene();
-	//soundengine->Update();
+	soundengine->Update();
 }
 //-----------------------------------------------------------------------------
 // Name: 描画処理。
 //-----------------------------------------------------------------------------
 VOID Render()
 {
-
 	//シーンの描画開始。
 	g_pd3dDevice->BeginScene();
 
@@ -245,6 +243,7 @@ VOID Render()
 	
 	scenemanager->RenderScene();
 
+
 	//シーンの描画が完了したのでレンダリングターゲットをフレームバッファに戻す。
 	g_pd3dDevice->SetRenderTarget(0, frameBufferRT);
 	g_pd3dDevice->SetDepthStencilSurface(frameBufferDS);
@@ -263,11 +262,14 @@ VOID Render()
 //-----------------------------------------------------------------------------
 void Terminate()
 {
+	soundengine->Release();
 	copyEffect->Release();
 	g_pd3dDevice->Release();
+	effectmanager->Release();
 	delete scenemanager;
 	delete game;
-	delete effectmanager;
 	delete rendertarget;
 	delete quadPrimitive;
+	delete effectmanager;
+	delete soundengine;
 }

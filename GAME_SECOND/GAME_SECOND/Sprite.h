@@ -27,6 +27,8 @@ public:
 	void SetPivot(const D3DXVECTOR2& pivot){ this->pivot = pivot; }
 	D3DXVECTOR3 Getpos(){ return position; }
 	D3DXVECTOR2 Getsize(){ return size;}
+	float Getalpha()const { return alpha; }
+	void Setalpha(float a) { alpha = a; }
 private:
 	Primitive			primitive;			//!<プリミティブ。
 	LPDIRECT3DTEXTURE9  texture = nullptr;			//!<テクスチャ。
@@ -34,5 +36,6 @@ private:
 	D3DXVECTOR2			size = D3DXVECTOR2(1.0f, 1.0f);
 	D3DXVECTOR2			pivot = D3DXVECTOR2(0.5f, 0.5f);
 	D3DXVECTOR3			position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	float				alpha = 1.0f;
 };
 

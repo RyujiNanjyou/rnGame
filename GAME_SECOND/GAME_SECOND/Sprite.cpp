@@ -121,6 +121,7 @@ void Sprite::Render(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix)
 
 	spriteEffect->SetValue("g_mWVP", &m, sizeof(m));
 	spriteEffect->SetTexture("g_texture", texture);
+	spriteEffect->SetValue("g_alpha", &alpha, sizeof(alpha));
 	spriteEffect->CommitChanges();
 
 	g_pd3dDevice->SetStreamSource(0, primitive.GetVertexBuffer()->GetBody(), 0, primitive.GetVertexBuffer()->GetStride());
@@ -130,7 +131,5 @@ void Sprite::Render(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix)
 	spriteEffect->EndPass();
 	spriteEffect->End();
 	g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-	//g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
-	//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
-	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+	
 }

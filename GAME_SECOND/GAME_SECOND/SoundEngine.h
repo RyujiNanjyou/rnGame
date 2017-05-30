@@ -122,3 +122,4 @@
 		std::list<SoundSource*>	soundSource;	//!<3Dサウンドのサウンドソース。
 		X3DAUDIO_CONE	emitterCone;
 	};
+	extern SoundEngine* soundengine;

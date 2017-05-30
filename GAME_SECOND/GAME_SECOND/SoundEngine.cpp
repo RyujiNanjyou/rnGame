@@ -330,7 +330,7 @@
 				// Apply X3DAudio generated DSP settings to XAudio2
 				voice->SetFrequencyRatio(dspSettings->DopplerFactor);
 				voice->SetOutputMatrix(masteringVoice, soundSource->GetNumInputChannel(), nChannels,
-					soundSource->GetMatrixCoefficients());
+				soundSource->GetMatrixCoefficients());
 
 				voice->SetOutputMatrix(submixVoice, soundSource->GetNumInputChannel(), 1, &dspSettings->ReverbLevel);
 

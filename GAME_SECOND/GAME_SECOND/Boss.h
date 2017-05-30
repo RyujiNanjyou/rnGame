@@ -20,6 +20,19 @@ public:
 	int Gethp(){ return hp; }
 	int Getmaxhp(){ return maxhp; }
 	NowBossState GetBossS() { return nowbossS; }
+	private:
+	D3DXQUATERNION SetRotation(const D3DXVECTOR3 axis, float angle)
+	{
+		float s;
+		float halfAngle = angle * 0.5f;
+		s = sin(halfAngle);
+		rotation.w = cos(halfAngle);
+		rotation.x = axis.x * s;
+		rotation.y = axis.y * s;
+		rotation.z = axis.z * s;
+
+		return rotation;
+	}
 private:
 	NowBossState			nowbossS;
 	float					radius = 0.3f;
@@ -29,6 +42,9 @@ private:
 	bool					comp = false;
 	int	intervalTime = 0;
 	int	intervalDamageTime = 0;
-	int num = 0;
+	float num = 0.0f;
+	float deltaTime = 1.0f / 60.0f;
+	std::unique_ptr<SoundSource> bossAttackse;
+	std::unique_ptr<SoundSource> deathse;
 };
 

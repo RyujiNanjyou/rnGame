@@ -62,7 +62,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d9.lib;d3dx9.lib;%(AdditionalDependencies);BulletCollision_Debug.lib;BulletDynamics_Debug.lib;LinearMath_Debug.lib</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;X3daudio.lib;%(AdditionalDependencies);BulletCollision_Debug.lib;BulletDynamics_Debug.lib;LinearMath_Debug.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -103,6 +103,7 @@
     <ClInclude Include="Enemyinfo.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="EnemyTama.h" />
+    <ClInclude Include="Fade.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameOver2D.h" />
     <ClInclude Include="GameScene.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="EnemyTama.cpp" />
+    <ClCompile Include="Fade.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameOver2D.cpp" />
     <ClCompile Include="GameScene.cpp" />

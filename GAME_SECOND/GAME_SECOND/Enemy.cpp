@@ -27,7 +27,7 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
-	
+	Release();
 }
 void Enemy::Start(D3DXVECTOR3 pos, D3DXQUATERNION rotation)
 {
@@ -74,14 +74,15 @@ void Enemy::Damage()
 	}
 	if (hp <= 0)
 	{
+		hp = 0;
 		nowEnemyS = EnemyS::DEATH;
 	}
 	if (nowEnemyS == EnemyS::DEATH)
 	{
-		SoundSource* se = new SoundSource;
-		se->Init("Assets/Sound/bomb.wav");
-		se->Play(false);
-		se->SetVolume(0.8f);
+		bombse.reset(new SoundSource);
+		bombse->Init("Assets/Sound/bomb.wav");
+		bombse->Play(false);
+		bombse->SetVolume(0.8f);
 		characterController.RemoveRigidBoby();
 		deathflag = false;
 		lock = false;
@@ -98,6 +99,7 @@ bool Enemy::Update()
 	float posLen = D3DXVec3Length(&toPos);
 	if (posLen< 5.0f)
 	{
+		
 		if (intervalTime == 0)
 		{
 			EnemyTama* tama = new EnemyTama();
@@ -106,12 +108,11 @@ bool Enemy::Update()
 			tama->Shot(pos, D3DXVECTOR3(-1.0f,0.0f,0.0f));
 			tama->Init(g_pd3dDevice, "Assets/Model/tama");
 			game->AddEnemyTama(tama);
-
-			SoundSource* se = new SoundSource;
-			se->Init("Assets/Sound/beam-gun01.wav");
-			se->Play(false);
-			se->SetVolume(0.1f);
-
+			
+			enemyAttackse.reset(new SoundSource);
+			enemyAttackse->Init("Assets/Sound/beam-gun01.wav");
+			enemyAttackse->Play(false);
+			enemyAttackse->SetVolume(0.1f);
 			intervalTime = 20;
 		}
 		intervalTime--;
@@ -121,12 +122,16 @@ bool Enemy::Update()
 		}
 		if (!characterController.IsJump())
 		{
-			SoundSource* se = new SoundSource;
-			se->Init("Assets/Sound/jump01.wav");
-			se->Play(false);
-			se->SetVolume(0.1f);
+			enemyJumpse.reset(new SoundSource);
+			enemyJumpse->Init("Assets/Sound/jump01.wav");
+			enemyJumpse->Play(false);
+			enemyJumpse->SetVolume(0.1f);
 			move.y += 10.0f;
 			characterController.Jump();
+		}
+		else
+		{
+
 		}
 	}
 	Damage();

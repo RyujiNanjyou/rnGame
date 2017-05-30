@@ -7,7 +7,6 @@ LPDIRECT3D9				g_pD3D = NULL;
 LPDIRECT3DDEVICE9		g_pd3dDevice = NULL;
 HWND					g_hwnd = NULL;
 EffectManager*			effectmanager = NULL;
-SoundEngine*			soundengine = NULL;
 
 
 extern void Init();
@@ -48,7 +47,6 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			g_pd3dDevice->Release();
 		if (g_pD3D != NULL)
 			g_pD3D->Release();
-		soundengine->Release();
 		Terminate();
 		PostQuitMessage(0);
 		return 0;
@@ -79,7 +77,7 @@ INT  WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 
 	// Direct3D‚ð‰Šú‰»B
 	InitD3D(hWnd);
-	soundengine->Init();
+	
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 	UpdateWindow(hWnd);
@@ -100,7 +98,7 @@ INT  WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 		else {
 			Update();
 			Render();
-			soundengine->Update();
+			
 		}
 	}
 	UnregisterClass("GAME_SECOND", wc.hInstance);

@@ -219,8 +219,7 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 	float4 lig = 0.0f;
 	{
 		for (int i = 0; i < DIFFUSE_LIGHT_NUM; i++){
-			lig.xyz += max(0.0f, dot(normal.xyz,-g_diffuseLightDirection[i].xyz))
-				* g_diffuseLightColor[i].xyz;
+			lig.xyz += max(0.0f, dot(normal.xyz,-g_diffuseLightDirection[i].xyz)) * g_diffuseLightColor[i].xyz;
 			//スペキュラを計算。
 			float3 L = -g_diffuseLightDirection[i].xyz;
 				float3 H = normalize(L + normalize(In.Eye));//ハーフベクトル。
@@ -242,7 +241,7 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 		{
 			float z = tex2D(g_shadowTextureSampler, shadowMapUV).x;
 			
-			if (z > posInLVP.z - 0.0006f)
+			if (z < posInLVP.z + 0.6)
 			{
 				lig = 0.5f;
 			}
@@ -257,9 +256,8 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 float4 PSDrowToShadowMapMain(VS_OUTPUT In) : COLOR
 {
 	float z = In.lightViewPos_1.z / In.lightViewPos_1.w;
-	return (z, z, z, 1.0f);
-	
-
+	//return (z, z, z, 1.0f);
+    return z;
 }
 /*!
  *@brief	スキンありモデル用のテクニック。

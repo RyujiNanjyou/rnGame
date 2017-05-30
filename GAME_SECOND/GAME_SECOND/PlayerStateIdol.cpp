@@ -32,19 +32,20 @@ void PlayerStateIdol::Update()
 	{
 		
 	}
+	
 	if (game->GETPad()->IsPress(enButtonA) && !player->characterController.IsJump())
 	{
-
-		SoundSource* se = new SoundSource;
-		se->Init("Assets/Sound/jump06.wav");
-		se->Play(false);
-		se->SetVolume(0.1f);
+		
+		player->Jumpse.reset(new SoundSource);
+		player->Jumpse->Init("Assets/Sound/jump06.wav");
+		player->Jumpse->Play(false);
+		player->Jumpse->SetVolume(0.1f);
+	
 		moveSpeed.y = 6.5f;
 		player->characterController.Jump();
 
-
-
 	}
+	
 	if (game->GETPad()->IsPress(enButtonRB1))
 	{
 		player->ShotPlayer(pos, forward);

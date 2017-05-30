@@ -37,6 +37,14 @@ public:
 	void ChangeState(NowState nexstate);
 	void Damage();
 	bool LockOnEnemy();
+	void Target();
+	void ShotPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 forward);
+	D3DXVECTOR3	Getforward() { return forward; }
+	int Gethp(){ return hp; }
+	int Getmaxhp(){ return maxhp; }
+	bool GetisDamage() { return isDamage; }
+	NowState GetNowS() { return state; }
+private:
 	D3DXQUATERNION SetRotation(const D3DXVECTOR3 axis, float angle)
 	{
 		float s;
@@ -49,14 +57,6 @@ public:
 
 		return rotation;
 	}
-	void Target();
-	void ShotPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 forward);
-	D3DXVECTOR3	Getforward() { return forward; }
-	int Gethp(){ return hp; }
-	int Getmaxhp(){ return maxhp; }
-	bool GetisDamage() { return isDamage; }
-	NowState GetNowS() { return state; }
-
 private:
 	friend class	PlayerStateRun;
 	friend class	PlayerStateIdol;
@@ -82,11 +82,12 @@ private:
 	Enemy*					lockOnEnemy = NULL;
 	LPDIRECT3DTEXTURE9		normalMap = skinmodel.GetNormal();				//<!ノーマルマップ。
 	LPDIRECT3DTEXTURE9		specularMap = skinmodel.GetSpec();				//<!スペキュラマップ。
-
 	int						intervalTime = 0; 
 	int						shotintervalTime = 0;
 	int						damageTime = 0;
 	bool					renderflag = false;
+	std::unique_ptr<SoundSource> Attackse;
+	std::unique_ptr<SoundSource> Jumpse;
 	
 };
 

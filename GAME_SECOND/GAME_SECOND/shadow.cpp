@@ -21,8 +21,8 @@ void ShadowMap::Create(int w, int h)
 	rendertarget.Create(w, h, 1, D3DFMT_A8R8G8B8, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);
 	this->h = h;
 	this->w = w;
-	Near = 1.0f;
-	Far = 1000.0f;
+	Near = 0.1f;
+	Far = 100.0f;
 	LPD3DXBUFFER  compileErrorBuffer = NULL;
 }
 
@@ -32,8 +32,6 @@ void ShadowMap::Render(
 	D3DXMATRIX* projMatrix
 	)
 {
-	
-
 	g_pd3dDevice->GetViewport(&viewport);
 	g_pd3dDevice->GetRenderTarget(0, &BackBuffer);
 	g_pd3dDevice->GetDepthStencilSurface(&BackZ);
@@ -45,7 +43,7 @@ void ShadowMap::Render(
 		0,
 		NULL,
 		D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,
-		D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f),
+		D3DXCOLOR(1.0f,1.0f,1.0f, 1.0f),
 		1.0f,
 		0);
 

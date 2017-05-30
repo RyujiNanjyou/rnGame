@@ -13,5 +13,8 @@ public:
 private:
 	Title t;
 	Camera c;
+	std::unique_ptr<SoundSource> titlese;
+	float atime = 0.0f;
+	float deltaTime = 1.0f / 60.0f;
 };
 

@@ -49,4 +49,6 @@ void GameObject::Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)
 }
 void GameObject::Release()
 {
+	
+	
 }

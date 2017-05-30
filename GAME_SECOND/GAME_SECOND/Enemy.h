@@ -32,5 +32,9 @@ private:
 	bool lock = true;
 	int damageTime = 0;
 	int intervalTime = 0;
+	std::unique_ptr<SoundSource> enemyJumpse;
+	std::unique_ptr<SoundSource> enemyAttackse;
+	std::unique_ptr<SoundSource> bombse;
+
 };
 
