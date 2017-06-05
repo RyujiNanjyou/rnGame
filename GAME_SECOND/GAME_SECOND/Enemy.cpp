@@ -129,10 +129,6 @@ bool Enemy::Update()
 			move.y += 10.0f;
 			characterController.Jump();
 		}
-		else
-		{
-
-		}
 	}
 	Damage();
 	

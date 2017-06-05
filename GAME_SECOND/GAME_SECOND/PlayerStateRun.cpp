@@ -55,12 +55,11 @@ void PlayerStateRun::Update()
 	}
 	if (game->GETPad()->IsPress(enButtonA) && !player->characterController.IsJump())
 	{
-
-		
 		player->Jumpse.reset(new SoundSource);
 		player->Jumpse->Init("Assets/Sound/jump06.wav");
 		player->Jumpse->Play(false);
 		player->Jumpse->SetVolume(0.1f);
+
 		moveSpeed.y = 6.5f;
 		player->characterController.Jump();
 	}
@@ -69,7 +68,6 @@ void PlayerStateRun::Update()
 	}
 	if (game->GETPad()->IsPress(enButtonRB1))
 	{
-		
 		player->ShotPlayer(player->position, player->forward);
 	}
 	

@@ -16,7 +16,9 @@ public:
 	~Boss();
 	void Init(LPDIRECT3DDEVICE9 pd3dDevice, const char* Name) override;
 	bool Update() override;
+	void Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag) override;
 	void Damage();
+	void Attackshot();
 	int Gethp(){ return hp; }
 	int Getmaxhp(){ return maxhp; }
 	NowBossState GetBossS() { return nowbossS; }
@@ -44,6 +46,8 @@ private:
 	int	intervalDamageTime = 0;
 	float num = 0.0f;
 	float deltaTime = 1.0f / 60.0f;
+	int						damageTime = 0;
+	bool					renderflag = false;
 	std::unique_ptr<SoundSource> bossAttackse;
 	std::unique_ptr<SoundSource> deathse;
 };

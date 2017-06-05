@@ -43,6 +43,7 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 	case WM_DESTROY:
+
 		if (g_pd3dDevice != NULL)
 			g_pd3dDevice->Release();
 		if (g_pD3D != NULL)

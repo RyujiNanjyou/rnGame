@@ -90,7 +90,8 @@ private:
 	Complete2D          comp;
 	GameOver2D          over;
 	SkyBox				sky;
-
+	
+	SoundSource bgm;
 	
 };
 extern GameScene* game;

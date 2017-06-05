@@ -11,29 +11,27 @@ TitleScene::TitleScene()
 
 TitleScene::~TitleScene()
 {
-
 }
 void TitleScene::Init()
 {
+	
+
 	c.Init();
 	t.Init();
-	
+
+	titlebgm.InitStreaming("Assets/Sound/game_maoudamashii_7_event43 (online-audio-converter.com).wav");
+	titlebgm.Play(true);
+	titlebgm.SetVolume(0.5f);
 }
 void TitleScene::Update()
 {
+	
+	titlebgm.Update();
 	pad.Update();
-	atime += deltaTime;
 	if (pad.IsTrigger(enButtonA))
 	{
-		titlese.reset(new SoundSource);
-		titlese->Init("Assets/Sound/select08.wav");
-		titlese->Play(false);
-		titlese->SetVolume(0.8f);
-		
-		if (atime > 0.5f)
-		{
-			scenemanager->ChangeScene(scenemanager->Scenes::GAME);
-		}
+		titlebgm.Stop();
+		scenemanager->ChangeScene(scenemanager->Scenes::GAME);
 	}
 	
 		

@@ -65,7 +65,7 @@ void Player::Init(LPDIRECT3DDEVICE9 pd3dDevice, const char* Name)
 	anim.SetAnimationEndTime(RUN, 0.8f);
 	anim.SetAnimationLoopFlag(JUMP, false);
 	anim.PlayAnimation(IDOL);
-	position = D3DXVECTOR3(bosspos);//bosspos,originpos
+	position = D3DXVECTOR3(originpos);//bosspos,originpos
 	rotation = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
 	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	D3DXVECTOR3 pos = position;

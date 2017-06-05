@@ -18,7 +18,7 @@ bool Fade::Start()
 	sprite.Setsize({
 		static_cast<float>(WINDOW_WIDTH),
 		static_cast<float>(WINDOW_HEIGHT) });
-	//SetActiveFlag(false);
+	activeFlag = false;
 	sprite.Setalpha(0.0f);
 	return true;
 }
@@ -27,7 +27,7 @@ void Fade::Update()
 	if (isExecute) {
 		switch (state) {
 		case eFadeOut: {
-			//timer += GameTime().GetFrameDeltaTime();
+			timer += 1.0f/60.0f;
 			if (timer < FADE_TIME) {
 				float t = timer / FADE_TIME;
 				sprite.Setalpha(min(t, 1.0f));
@@ -38,7 +38,7 @@ void Fade::Update()
 			}
 		}break;
 		case eFadeIn:
-			//timer += GameTime().GetFrameDeltaTime();
+			timer += timer += 1.0f/60.0f;
 			if (timer < FADE_TIME) {
 				float t = timer / FADE_TIME;
 				sprite.Setalpha(max(1.0f - t, 0.0f));
@@ -46,7 +46,7 @@ void Fade::Update()
 			else {
 				//透明になったので非アクティブにする。
 				sprite.Setalpha(0.0f);
-				//SetActiveFlag(false);
+				activeFlag = false;
 				isExecute = false;
 			}
 			break;

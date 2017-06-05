@@ -262,14 +262,13 @@ VOID Render()
 //-----------------------------------------------------------------------------
 void Terminate()
 {
-	soundengine->Release();
 	copyEffect->Release();
 	g_pd3dDevice->Release();
-	effectmanager->Release();
+	effectmanager->Release(); 
+	rendertarget->Release();
 	delete scenemanager;
 	delete game;
 	delete rendertarget;
 	delete quadPrimitive;
-	delete effectmanager;
-	delete soundengine;
+	
 }

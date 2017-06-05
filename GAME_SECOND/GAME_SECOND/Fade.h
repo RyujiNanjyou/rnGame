@@ -71,5 +71,6 @@ private:
 	EnState		state = eFadeIn;		//!<状態。
 	bool		isExecute = false;	//!<フェードを実行中？
 	float		timer = 1.0f;			//!<タイマ(単位：秒)
+	bool        activeFlag = false;
 };
 

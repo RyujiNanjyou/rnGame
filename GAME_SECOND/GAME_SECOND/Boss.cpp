@@ -44,6 +44,16 @@ void Boss::Damage()
 			if (intervalDamageTime == 0)
 			{
 				hp -= 1;
+				if (hp <= 0.0f)
+				{
+					hp = 0;
+					nowbossS = NowBossState::BossSTATE_DEAD;
+
+				}
+				else
+				{
+					renderflag = true;
+				}
 				intervalDamageTime = 5;
 			}
 			intervalDamageTime--;
@@ -53,12 +63,7 @@ void Boss::Damage()
 			}
 		}
 	}	
-	if (hp <= 0.0f)
-	{
-		hp = 0;
-		nowbossS = NowBossState::BossSTATE_DEAD;
-		
-	}
+	
 	if (nowbossS == NowBossState::BossSTATE_DEAD)
 	{	
 		/*deathse.reset(new SoundSource);
@@ -69,16 +74,41 @@ void Boss::Damage()
 		characterController.RemoveRigidBoby();
 		comp = true;
 		num += deltaTime;
-		if (num > 2.0f)
+		if (num > 1.0f)
 		{
 			scenemanager->ChangeScene(scenemanager->TITLE);
 		}
 	}
 }
+void Boss::Attackshot()
+{
+	if (intervalTime == 0)
+	{
+		BossTama* tama = new BossTama();
+		D3DXVECTOR3 pos = position;
+		pos.y += 0.5;
+		D3DXVECTOR3 dir(1.0f, 0.0f, 0.0f);
+		angle += PI / 5;
+		dir.x = cos(angle);
+		dir.z = sin(angle);
+		tama->Shot(pos, dir);
+		tama->Init(g_pd3dDevice, "Assets/Model/tama");
+		game->AddBossTama(tama);
 
+		bossAttackse.reset(new SoundSource);
+		bossAttackse->Init("Assets/Sound/beam-gun01.wav");
+		bossAttackse->Play(false);
+		bossAttackse->SetVolume(0.1f);
+		intervalTime = 7;
+	}
+	intervalTime--;
+	if (intervalTime <= 0)
+	{
+		intervalTime = 0;
+	}
+}
 bool Boss::Update()
 {
-
 	position = characterController.GetPosition();
 	D3DXVECTOR3 moveSpeed = characterController.GetMoveSpeed();
 	moveSpeed.x = Zero.x;
@@ -93,38 +123,34 @@ bool Boss::Update()
 		{
 			moveSpeed = to * 0.7f;
 			rotation = SetRotation(Up, atan2f(to.x, to.z));
-			if (intervalTime == 0)
-			{
-				BossTama* tama = new BossTama();
-				D3DXVECTOR3 pos = position;
-				pos.y += 0.5;
-				D3DXVECTOR3 dir(1.0f, 0.0f, 0.0f);
-				angle += PI / 5;
-				dir.x = cos(angle);
-				dir.z = sin(angle);
-				tama->Shot(pos, dir);
-				tama->Init(g_pd3dDevice, "Assets/Model/tama");
-				game->AddBossTama(tama);
-				
-				bossAttackse.reset(new SoundSource);
-				bossAttackse->Init("Assets/Sound/beam-gun01.wav");
-				bossAttackse->Play(false);
-				bossAttackse->SetVolume(0.1f);
-
-				intervalTime = 7;
-			}
-			intervalTime--;
-			if (intervalTime <= 0)
-			{
-				intervalTime = 0;
-			}
+			Attackshot();
 		}
-
 	}
-	
 	characterController.SetMoveSpeed(moveSpeed);
 	characterController.Execute();
 	position.y += 0.5f;
 	GameObject::Update();
 	return true;
+}
+void Boss::Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)
+{
+	if (renderflag == true)
+	{
+		if (damageTime == 0)
+		{
+			GameObject::Render(viwe, proj, ShadowFlag);
+			damageTime = 5;
+		}
+		damageTime--;
+		if (damageTime <= 0)
+		{
+			damageTime = 0;
+			renderflag = false;
+		}
+	}
+	else if (renderflag == false)
+	{
+		GameObject::Render(viwe, proj, ShadowFlag);
+	}
+
 }

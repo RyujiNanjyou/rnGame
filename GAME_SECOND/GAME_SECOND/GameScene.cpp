@@ -34,7 +34,7 @@ void GameScene::Init()
 	comp.Init();
 	over.Init();
 	playcam.Start(&player);
-	player.Init(g_pd3dDevice, "Assets/Model/unity");////SD_unitychan
+	player.Init(g_pd3dDevice, "Assets/Model/unity");
 	boss.Init(g_pd3dDevice, "Assets/Model/Boss");
 	enemy.Start();
 	map.Start();
@@ -42,6 +42,12 @@ void GameScene::Init()
 	BaseTama* tama = new BaseTama;
 	tama->Init(g_pd3dDevice, "Assets/Model/tama");
 	shadow.Create(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+	bgm.InitStreaming("Assets/Sound/game_maoudamashii_4_field01 (online-audio-converter.com).wav");
+	bgm.Play(true);
+	bgm.SetVolume(0.8f);
+
+	
 }
 
 void GameScene::Update()
@@ -59,6 +65,7 @@ void GameScene::Update()
 	pad.Update();
 	map.Update();
 	sky.Update();
+	bgm.Update();
 	auto bulletIt = playertama.begin();
 	while (bulletIt != playertama.end()) {
 		if (!(*bulletIt)->Update()) {
@@ -94,6 +101,7 @@ void GameScene::Update()
 	D3DXVECTOR3 lightDir = player.Getpos() - lightposition;
 	D3DXVec3Normalize(&lightDir, &lightDir);
 	shadow.SetLightDirection(lightDir);
+	
 	if (GetAsyncKeyState(VK_ESCAPE))
 	{
 		exit(0);
