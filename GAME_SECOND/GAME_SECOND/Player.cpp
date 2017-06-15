@@ -32,7 +32,7 @@ deadstate(this)
 Player::~Player()
 {
 	Release();
-	
+
 }
 
 void Player::Init(LPDIRECT3DDEVICE9 pd3dDevice, const char* Name)
@@ -49,13 +49,13 @@ void Player::Init(LPDIRECT3DDEVICE9 pd3dDevice, const char* Name)
 	GameObject::Init(pd3dDevice, Name);
 
 	if (normalMap != NULL) {
-		//法線マップの読み込みが成功したので、CSkinModelに法線マップを設定する。
+		//法線マップの読み込みが成功したので、SkinModelに法線マップを設定する。
 		skinmodel.SetNormalMap(normalMap);
 		skinmodel.SetNormalMapflag(true);
 
 	}
 	if (specularMap != NULL) {
-		//スペキュラマップの読み込みが成功したので、CSkinModelにスペきゅらマップを設定する。
+		//スペキュラマップの読み込みが成功したので、SkinModelにスペキュラマップを設定する。
 		skinmodel.SetSpecularMap(specularMap);
 		skinmodel.SetSpecularMapflag(true);
 
@@ -65,14 +65,14 @@ void Player::Init(LPDIRECT3DDEVICE9 pd3dDevice, const char* Name)
 	anim.SetAnimationEndTime(RUN, 0.8f);
 	anim.SetAnimationLoopFlag(JUMP, false);
 	anim.PlayAnimation(IDOL);
-	position = D3DXVECTOR3(originpos);//bosspos,originpos
+	position = D3DXVECTOR3(bosspos);//bosspos,originpos
 	rotation = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
 	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	D3DXVECTOR3 pos = position;
 	characterController.Init(radius, height, pos);
 	characterController.SetGravity(-15.0f);	//重力強め。
 	
-
+	
 }
 void Player::PlayAnimation(PlayerAnimNo animNo, float interpolate)
 {
@@ -83,7 +83,6 @@ void Player::PlayAnimation(PlayerAnimNo animNo, float interpolate)
 }
 void Player::Animation()
 {
-
 	if (characterController.IsJump())
 	{
 		PlayAnimation(JUMP, 0.05f);
@@ -177,6 +176,11 @@ void Player::UpdateState()
 					islockOn = false;
 				}
 			}
+			if (lockOnEnemy != NULL)
+			{
+				game->GetlockOn()->SetLockOnEnemy(lockOnEnemy);
+			}
+			
 		}
 		else
 		{
@@ -190,8 +194,9 @@ void Player::Target()
 {
 	if (islockOn)
 	{
+		
 		D3DXVECTOR3 toenemy = lockOnEnemy->Getpos() - position;
-		rotation = SetRotation(Up, atan2f(toenemy.x, toenemy.z));
+		D3DXQuaternionRotationAxis(&rotation, &Up, atan2f(toenemy.x, toenemy.z));
 	}
 	else
 	{
@@ -199,7 +204,7 @@ void Player::Target()
 		movespeed.y = 0.0f;
 		if (D3DXVec3LengthSq(&movespeed) > 0.001f)
 		{
-			rotation = SetRotation(Up, atan2f(movespeed.x, movespeed.z));
+			D3DXQuaternionRotationAxis(&rotation, &Up, atan2f(movespeed.x, movespeed.z));
 		}
 	}
 }

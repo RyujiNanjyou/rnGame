@@ -2,6 +2,9 @@
 #include "Scene.h"
 #include "Title.h"
 #include "camera.h"
+/*!
+*@brief	タイトル画面。
+*/
 class TitleScene : public Scene
 {
 public:
@@ -12,7 +15,6 @@ public:
 	void Render();
 private:
 	Title t;
-	Camera c;
 	std::unique_ptr<SoundSource> titlese;
 	SoundSource titlebgm;
 	float atime = 0.0f;

@@ -5,8 +5,11 @@
 
 namespace
 {
-	const D3DXVECTOR2 maxsize = D3DXVECTOR2(390.0f , 30.0f);
-	const D3DXVECTOR2 gaugesize = D3DXVECTOR2(413.0f , 50.0f);
+	 D3DXVECTOR2 maxsize(390.0f , 30.0f);
+	 D3DXVECTOR2 gaugesize(413.0f , 50.0f);
+	 D3DXVECTOR2 BossposHp(0.0f, -300.0f);
+	 D3DXVECTOR2 posHp(-400.0f, 300.0f);
+	 D3DXVECTOR2 sizeHp(1000.0f, 50.0f);
 }
 
 HpBar::HpBar()
@@ -23,15 +26,21 @@ void HpBar::Init()
 	hpBar.Setsize(maxsize);
 	hpGauge.Setsize(gaugesize);
 	hpBar.SetPivot({ 0.5f,0.5f });
-	hpBar.Setpos(D3DXVECTOR3(280.0f, 405.0f, 0.0f));
-	hpGauge.Setpos(D3DXVECTOR3(280.0f, 405.0f, 0.0f));
-	
+	hpBar.Setpos(posHp);
+	hpGauge.Setpos(posHp);
+	bossHp.Init("Assets/Model/hp.png");
+	bossHp.Setsize(sizeHp);
+	bossHp.SetPivot({ 0.5f,0.5f });
+	bossHp.Setpos(BossposHp);
 
 	
 	
 }
 void HpBar::Update()
 {
+	//後で関数化する
+
+	//プレイヤーヒットポイント計算
 	float hpRate = (float)game->GetPlayer()->Gethp() / (float)game->GetPlayer()->Getmaxhp();
 	D3DXVECTOR2 hpsize = maxsize ;
 	// 一瞬前のHPバーのサイズを保存しておく。
@@ -41,23 +50,44 @@ void HpBar::Update()
 	// 一瞬前のスケールを保存。
 	float PrevScaleSize_X = hpBar.Getsize().x ;
 	hpBar.Setsize(hpsize);
-	if (game->GetPlayer()->Getpos().y < -10.0f)
-	{
-		
-	}
+
 	// 減った分、横にずらすための差分を算出。
 	float offset = (PrevScaleSize_X - hpBar.Getsize().x ) / 2.0f;
 	// ずらす。
-	D3DXVECTOR3 pos = hpBar.Getpos();
+	D3DXVECTOR2 pos = hpBar.Getpos();
 	pos.x += offset;
 	hpBar.Setpos(pos);
+
+	//一応ボスのヒットポイント計算
+
+	float hpRateB = (float)game->GetBoss()->Gethp() / (float)game->GetBoss()->Getmaxhp();
+	D3DXVECTOR2 hpsizeB = sizeHp;
+	// 一瞬前のHPバーのサイズを保存しておく。
+	float BhozonnHp_X = hpsizeB.x;
+	hpsizeB.x *= hpRateB;
+	// 一瞬前のスケールを保存。
+	float BPrevScaleSize_X = bossHp.Getsize().x;
+	bossHp.Setsize(hpsizeB);
+	// 減った分、横にずらすための差分を算出。
+	float offsetB = (BPrevScaleSize_X - bossHp.Getsize().x) / 2.0f;
+	// ずらす。
+	D3DXVECTOR2 posB = bossHp.Getpos();
+	posB.x += offsetB;
+	bossHp.Setpos(posB);
 }
-void HpBar::Render(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix)
+void HpBar::Render()
 {
-	hpGauge.Render(viewMatrix, projMatrix);
-	if ( game->GetPlayer()->GetNowS() != game->GetPlayer()->STATE_DEAD)
+	D3DXMATRIX identity;
+	D3DXMatrixIdentity(&identity);
+	hpGauge.Render(identity, identity);
+	if (game->GetPlayer()->GetNowS() != game->GetPlayer()->STATE_DEAD)
 	{
-		hpBar.Render(viewMatrix, projMatrix);
+		hpBar.Render(identity, identity);
+	}
+	D3DXVECTOR3 to = game->GetPlayer()->Getpos() - game->GetBoss()->Getpos();
+	if (D3DXVec3Length(&to) < 5.0f)
+	{
+		bossHp.Render(identity, identity);
 	}
 	
 }

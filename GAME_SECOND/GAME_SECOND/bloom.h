@@ -1,10 +1,18 @@
 #pragma once
 #include "RenderTarget.h"
+/*!
+*@brief	ブルーム。
+*/
 class Bloom
 {
 public:
+	/*!
+	*@brief	コンストラクタ。
+	*/
 	Bloom();
-
+	/*!
+	*@brief	デストラクタ。
+	*/
 	~Bloom();
 	void Render();
 	//	重みの更新

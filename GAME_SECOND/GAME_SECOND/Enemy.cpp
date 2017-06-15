@@ -46,8 +46,6 @@ void Enemy::Init(LPDIRECT3DDEVICE9 pd3dDevice, const char* Name)
 	GameObject::Init(pd3dDevice, &originalModelData);
 	nowEnemyS = EnemyS::IDOL;
 	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	float radius = 0.3f;
-	float height = 0.7f;
 	characterController.Init(radius, height,position);
 	characterController.SetGravity(-20.0f);
 	

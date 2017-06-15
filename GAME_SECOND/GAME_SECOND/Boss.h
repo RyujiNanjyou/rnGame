@@ -1,54 +1,80 @@
 #pragma once
 #include "GameObject.h"
 #include "Sprite.h"
+/*!
+*@brief	ボス。
+*/
 class Boss : public GameObject
 {
 public:
+	//状態
 	enum NowBossState
 	{
-		BossSTATE_RUN,
-		BossSTATE_IDOL,
-		BossSTATE_DAMAGE,
-		BossSTATE_DEAD,
-		BossSTATE_ATTACK
+		BossSTATE_RUN,//走る
+		BossSTATE_IDOL,//待機
+		BossSTATE_DAMAGE,//ダメージ
+		BossSTATE_DEAD,//死亡
+		BossSTATE_ATTACK//攻撃
 	};
+	/*!
+	*@brief	コンストラクタ。
+	*/
 	Boss();
+	/*!
+	*@brief	デストラクタ。
+	*/
 	~Boss();
+	/*!
+	*@brief	初期化。
+	*@param[in] pd3dDevice	デバイス
+	*@param[in] Name		ファイル名
+	*/
 	void Init(LPDIRECT3DDEVICE9 pd3dDevice, const char* Name) override;
+	/*!
+	*@brief	更新。
+	*/
 	bool Update() override;
+	/*!
+	*@brief	描画。
+	*@param[in] viwe		ビュー行列
+	*@param[in] proj		プロジェクション行列
+	*@param[in] ShadowFlag	影を落とすかのフラグ
+	*/
 	void Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag) override;
+	/*!
+	*@brief	ダメージ処理。
+	*/
 	void Damage();
+	/*!
+	*@brief	攻撃。
+	*/
 	void Attackshot();
+	/*!
+	*@brief	ヒットポイント取得。
+	*/
 	int Gethp(){ return hp; }
+	/*!
+	*@brief	最大ヒットポイント取得。
+	*/
 	int Getmaxhp(){ return maxhp; }
+	/*!
+	*@brief	ボスの状態の取得。
+	*/
 	NowBossState GetBossS() { return nowbossS; }
-	private:
-	D3DXQUATERNION SetRotation(const D3DXVECTOR3 axis, float angle)
-	{
-		float s;
-		float halfAngle = angle * 0.5f;
-		s = sin(halfAngle);
-		rotation.w = cos(halfAngle);
-		rotation.x = axis.x * s;
-		rotation.y = axis.y * s;
-		rotation.z = axis.z * s;
-
-		return rotation;
-	}
 private:
-	NowBossState			nowbossS;
-	float					radius = 0.3f;
-	float					height = 0.7f;
-	int						hp = 10;
-	int						maxhp = 10;
-	bool					comp = false;
-	int	intervalTime = 0;
-	int	intervalDamageTime = 0;
-	float num = 0.0f;
-	float deltaTime = 1.0f / 60.0f;
-	int						damageTime = 0;
-	bool					renderflag = false;
-	std::unique_ptr<SoundSource> bossAttackse;
-	std::unique_ptr<SoundSource> deathse;
+	NowBossState					nowbossS;					//状態
+	float							radius = 0.3f;				//横幅
+	float							height = 0.7f;				//縦幅
+	int								hp = 10;					//ヒットポイント
+	const int						maxhp = 10;					//最大ヒットポイント
+	bool							comp = false;				//クリアフラグ
+	int								intervalTime = 0;			//クールタイム
+	int								intervalDamageTime = 0;		//ダメージクールタイム
+	int								renderTime = 0;				//描画クールタイム
+	float							num = 0.0f;					//タイマー
+	const float						deltaTime = 1.0f / 60.0f;	//デルタタイム
+	bool							renderflag = false;			//描画フラグ
+	std::unique_ptr<SoundSource>	bossAttackse;				//攻撃サウンド
+	std::unique_ptr<SoundSource>	deathse;					//死亡サウンド
 };
 

@@ -23,8 +23,8 @@ sampler_state
     MipFilter = NONE;
 	MinFilter = LINEAR;
 	MagFilter = LINEAR;
-    AddressU = Wrap;
-	AddressV = Wrap;
+   /* AddressU = Wrap;
+	AddressV = Wrap;*/
 };
 
 VS_OUTPUT VSMain( VS_INPUT In )

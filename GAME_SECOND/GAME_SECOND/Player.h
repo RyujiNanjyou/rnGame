@@ -5,89 +5,141 @@
 #include "PlayerStateRun.h"
 #include "PlayerStateDamage.h"
 #include "PlayerStateDead.h"
+#include "LockOn2D.h"
 #include "Enemy.h"
-
+/*!
+* @brief	プレイヤー。
+*/
 class Player : public GameObject
 {
 public:
-	
+	//アニメーション状態。
 	enum  PlayerAnimNo
 	{
 		INVALID = -1,
-		IDOL = 0,
-		WALK,
-		RUN,
-		JUMP,
+		IDOL = 0, //待機
+		WALK, //歩く
+		RUN, // 走る
+		JUMP, //ジャンプ
 	};
+	//プレイヤーの状態。
 	enum NowState
 	{
-		STATE_RUN,
-		STATE_IDOL,
-		STATE_DAMAGE,
-		STATE_DEAD
+		STATE_RUN, //走っている。
+		STATE_IDOL, //待機している。
+		STATE_DAMAGE, //ダメージ受けている。
+		STATE_DEAD //死亡。
 	};
+	/*!
+	*@brief	コンストラクタ。
+	*/
 	Player();
+	/*!
+	*@brief	デストラクタ
+	*/
 	~Player();
+	/*!
+	*@brief	初期化
+	*@param[in] pd3dDevice	デバイス
+	*@param[in] Name		ファイル名
+	*/
 	void Init(LPDIRECT3DDEVICE9 pd3dDevice, const char* Name) override;
+	/*!
+	*@brief	更新
+	*/
 	bool Update() override;
+	/*!
+	*@brief	描画
+	*@param[in] viwe		ビュー行列
+	*@param[in] proj		プロジェクション行列
+	*@param[in] ShadowFlag	影を落とすかのフラグ
+	*/
 	void Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)override;
+	/*!
+	*@brief	状態の更新
+	*/
 	void UpdateState();
+	/*!
+	* @brief	アニメーション再生。
+	*/
 	void PlayAnimation(PlayerAnimNo animNo, float interpolate);
+	/*!
+	*@brief	アニメーション。
+	*/
 	void Animation();
+	/*!
+	*@brief	状態遷移。
+	*@param[in] nexstate	遷移させたい状態
+	*/
 	void ChangeState(NowState nexstate);
+	/*!
+	*@brief	ダメージ処理。
+	*/
 	void Damage();
+	/*!
+	*@brief	敵へのロックオン。
+	*/
 	bool LockOnEnemy();
+	/*!
+	*@brief	ターゲット。
+	*/
 	void Target();
+	/*!
+	*@brief	弾の撃つ処理。
+	*/
 	void ShotPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 forward);
+	/*!
+	*@brief	向きの取得。
+	*/
 	D3DXVECTOR3	Getforward() { return forward; }
+	/*!
+	*@brief	ヒットポイントの取得。
+	*/
 	int Gethp(){ return hp; }
-	int Getmaxhp(){ return maxhp; }
+	/*!
+	*@brief	最大ヒットポイントの取得。
+	*/
+	const int Getmaxhp()const{ return maxhp; }
+	/*!
+	*@brief	ダメージフラグの取得。
+	*/
 	bool GetisDamage() { return isDamage; }
+	/*!
+	*@brief	今の状態の取得。
+	*/
 	NowState GetNowS() { return state; }
-private:
-	D3DXQUATERNION SetRotation(const D3DXVECTOR3 axis, float angle)
-	{
-		float s;
-		float halfAngle = angle * 0.5f;
-		s = sin(halfAngle);
-		rotation.w = cos(halfAngle);
-		rotation.x = axis.x * s;
-		rotation.y = axis.y * s;
-		rotation.z = axis.z * s;
 
-		return rotation;
-	}
 private:
 	friend class	PlayerStateRun;
 	friend class	PlayerStateIdol;
 	friend class	PlayerStateDamage;
 	friend class	PlayerStateDead;
 	
-	NowState				state;
-	NowState				lastFrameState;
-	PlayerState*			currentState = NULL;
-	PlayerStateIdol			idolstate;
-	PlayerStateRun			runstate;
-	PlayerStateDamage		damagestate;
-	PlayerStateDead			deadstate;
-	D3DXVECTOR3				forward;
-	int						hp = 50;
-	int						maxhp = 50;
-	float					radius = 0.4f;
-	float					height = 0.7f;
-	bool					isApplyDamageTrigger = false;
-	bool					isApplyDeadTrigger = false;
-	bool					islockOn = false;
-	bool					isDamage =  false;
-	Enemy*					lockOnEnemy = NULL;
-	LPDIRECT3DTEXTURE9		normalMap = skinmodel.GetNormal();				//<!ノーマルマップ。
-	LPDIRECT3DTEXTURE9		specularMap = skinmodel.GetSpec();				//<!スペキュラマップ。
-	int						intervalTime = 0; 
-	int						shotintervalTime = 0;
-	int						damageTime = 0;
-	bool					renderflag = false;
-	std::unique_ptr<SoundSource> Attackse;
-	std::unique_ptr<SoundSource> Jumpse;
+	NowState						state;											//状態
+	NowState						lastFrameState;									//最後のフレーム状態
+	PlayerState*					currentState = NULL;							//現在状態
+	PlayerStateIdol					idolstate;										//待機状態
+	PlayerStateRun					runstate;										//走る状態
+	PlayerStateDamage				damagestate;									//ダメージ状態
+	PlayerStateDead					deadstate;										//死亡状態
+	D3DXVECTOR3						forward;										//向き
+	int								hp = 50;										//ヒットポイント
+	const int						maxhp = 50;										//最大ヒットポイント
+	float							radius = 0.4f;									//横幅
+	float							height = 0.7f;									//縦幅
+	bool							isApplyDamageTrigger = false;					//ダメージ適用フラグ
+	bool							isApplyDeadTrigger = false;						//死亡適用フラグ
+	bool							islockOn = false;								//ロックオンフラグ
+	bool							isDamage =  false;								//ダメージフラグ
+	Enemy*							lockOnEnemy = NULL;								//ロックオンできる敵
+	LPDIRECT3DTEXTURE9				normalMap = skinmodel.GetNormal();				//<!ノーマルマップ。
+	LPDIRECT3DTEXTURE9				specularMap = skinmodel.GetSpec();				//<!スペキュラマップ。
+	int								intervalTime = 0;								//クールタイム
+	int								shotintervalTime = 0;							//攻撃クールタイム
+	int								damageTime = 0;									//ダメージクールタイム
+	bool							renderflag = false;								//描画フラグ
+	std::unique_ptr<SoundSource>	Attackse;										//攻撃サウンド
+	std::unique_ptr<SoundSource>	Jumpse;											//ジャンプサウンド
 	
 };
 

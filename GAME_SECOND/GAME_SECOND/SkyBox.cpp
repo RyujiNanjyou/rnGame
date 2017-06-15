@@ -32,7 +32,9 @@ void SkyBox::Init()
 
 void SkyBox::Update()
 {
-	skinmodel.UpdateWorldMatrix(game->GetGameCamera().GetCamera().GetLookatPt(), rot, scale);
+	D3DXVECTOR3 look = game->GetGameCamera().GetCamera().GetLookatPt();
+	look.y = -60.0f;
+	skinmodel.UpdateWorldMatrix(look, rot, scale);
 }
 
 void SkyBox::Render()

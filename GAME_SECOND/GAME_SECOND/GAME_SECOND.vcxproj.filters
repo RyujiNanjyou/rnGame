@@ -53,9 +53,6 @@
     <ClCompile Include="IndexBuffer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="KeyInput.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -137,9 +134,6 @@
     <ClCompile Include="HpBar.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerStateDamage.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -147,9 +141,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="BallCollision.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="BossHp.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="SkyBox.cpp">
@@ -218,9 +209,6 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="KeyInput.h">
@@ -340,9 +328,6 @@
     <ClInclude Include="HpBar.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerStateDamage.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
@@ -353,9 +338,6 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="SkyBox.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="BossHp.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Complete2D.h">

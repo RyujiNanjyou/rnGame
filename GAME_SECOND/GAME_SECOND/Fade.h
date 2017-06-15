@@ -1,5 +1,8 @@
 #pragma once
 #include "Sprite.h"
+/*!
+*@brief	フェード。
+*/
 class Fade
 {
 public:

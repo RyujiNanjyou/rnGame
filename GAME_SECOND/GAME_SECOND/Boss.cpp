@@ -121,8 +121,9 @@ bool Boss::Update()
 	{
 		if (len < 5.0f)
 		{
+			
 			moveSpeed = to * 0.7f;
-			rotation = SetRotation(Up, atan2f(to.x, to.z));
+			D3DXQuaternionRotationAxis(&rotation, &Up, atan2f(to.x, to.z));
 			Attackshot();
 		}
 	}
@@ -136,15 +137,15 @@ void Boss::Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)
 {
 	if (renderflag == true)
 	{
-		if (damageTime == 0)
+		if (renderTime == 0)
 		{
 			GameObject::Render(viwe, proj, ShadowFlag);
-			damageTime = 5;
+			renderTime = 5;
 		}
-		damageTime--;
-		if (damageTime <= 0)
+		renderTime--;
+		if (renderTime <= 0)
 		{
-			damageTime = 0;
+			renderTime = 0;
 			renderflag = false;
 		}
 	}

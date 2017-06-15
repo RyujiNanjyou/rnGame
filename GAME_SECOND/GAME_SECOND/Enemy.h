@@ -4,26 +4,61 @@
 #include "RigidBody.h"
 
 class EnemyManager;
+/*!
+*@brief	エネミー。
+*/
 class Enemy :public GameObject
 {
 public:
 	enum EnemyS{IDOL = 0,DEATH,DAMAGE};
+	/*!
+	*@brief	コンストラクタ。
+	*/
 	Enemy();
+	/*!
+	*@brief	デストラクタ。
+	*/
 	~Enemy();
+	/*!
+	*@brief	初期化。
+	*/
 	void Init(LPDIRECT3DDEVICE9 pd3dDevice, const char* Name) override;
+	/*!
+	*@brief	初期化。
+	*/
 	void Start(D3DXVECTOR3 pos, D3DXQUATERNION rotation);
+	/*!
+	*@brief	更新。
+	*/
 	bool Update() override;
+	/*!
+	*@brief	ダメージ。
+	*/
 	void Damage();
+	/*!
+	*@brief	描画。
+	*/
 	void Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)override;
+	/*!
+	*@brief	ロックオンできるか。
+	*/
 	bool IsPossibleLockOn() 
 	{
 		return lock;
 	}
+	/*!
+	*@brief	状態の設定。
+	*/
 	void SetnowEnemyS(EnemyS s) { nowEnemyS = s; }
+	/*!
+	*@brief	状態の取得。
+	*/
 	EnemyS GetnowEnemyS(){ return nowEnemyS; }
+	/*!
+	*@brief	死亡フラグの取得。
+	*/
 	bool GetDeathflag(){ return deathflag; }
-	bool GetDamageEffectflag(){ return damageEffect; }
-	void SetDamageEffectflag(bool f) { damageEffect = f; }
+	float GetHeight() { return height; }
 private:
 	EnemyS nowEnemyS;
 	int hp = 2;
@@ -32,7 +67,8 @@ private:
 	bool lock = true;
 	int damageTime = 0;
 	int intervalTime = 0;
-
+	float radius = 0.3f;
+	float height = 0.7f;
 	std::unique_ptr<SoundSource> enemyJumpse;
 	std::unique_ptr<SoundSource> enemyAttackse;
 	std::unique_ptr<SoundSource> bombse;

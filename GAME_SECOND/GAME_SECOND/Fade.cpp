@@ -15,9 +15,9 @@ bool Fade::Start()
 {
 	
 	//sprite.Init();
-	sprite.Setsize({
+	/*sprite.Setsize({
 		static_cast<float>(WINDOW_WIDTH),
-		static_cast<float>(WINDOW_HEIGHT) });
+		static_cast<float>(WINDOW_HEIGHT) });*/
 	activeFlag = false;
 	sprite.Setalpha(0.0f);
 	return true;

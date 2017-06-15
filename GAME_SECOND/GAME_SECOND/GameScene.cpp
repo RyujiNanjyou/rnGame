@@ -28,11 +28,11 @@ void GameScene::Init()
 	game = this;
 	//ï®óùÉèÅ[ÉãÉhÇèâä˙âªÅB
 	physics.Init();
-	c.Init();
+	camera2D.Init();
 	hpB.Init();
-	bossHp.Init();
 	comp.Init();
 	over.Init();
+	lock2D.Init();
 	playcam.Start(&player);
 	player.Init(g_pd3dDevice, "Assets/Model/unity");
 	boss.Init(g_pd3dDevice, "Assets/Model/Boss");
@@ -46,15 +46,16 @@ void GameScene::Init()
 	bgm.InitStreaming("Assets/Sound/game_maoudamashii_4_field01 (online-audio-converter.com).wav");
 	bgm.Play(true);
 	bgm.SetVolume(0.8f);
-
+	bossbgm.InitStreaming("Assets/Sound/game_maoudamashii_2_boss07.wav");
+	bossbgm.Play(true);
+	bossbgm.SetVolume(0.8f);
 	
 }
 
 void GameScene::Update()
 {
-	c.Update();
+	camera2D.Update();
 	hpB.Update();
-	bossHp.Update();
 	comp.Update();
 	over.Update();
 	playcam.PreUpdate();
@@ -66,6 +67,13 @@ void GameScene::Update()
 	map.Update();
 	sky.Update();
 	bgm.Update();
+	lock2D.Update();
+	D3DXVECTOR3 to = player.Getpos() - boss.Getpos();
+	if (D3DXVec3Length(&to) < 5.0f)
+	{
+		bgm.Stop();
+		bossbgm.Update();
+	}
 	auto bulletIt = playertama.begin();
 	while (bulletIt != playertama.end()) {
 		if (!(*bulletIt)->Update()) {
@@ -168,33 +176,8 @@ void GameScene::Render()
 			);
 	}
 	bloom.Render();
-	hpB.Render(
-		c.GetViewMatrix(),
-		c.GetProjectionMatrix()
-		);
-	D3DXVECTOR3 to = player.Getpos() - boss.Getpos();
-	if (D3DXVec3Length(&to) < 5.0f)
-	{
-		bossHp.Render(
-			c.GetViewMatrix(),
-			c.GetProjectionMatrix()
-			);
-
-	}
-	if (boss.GetBossS() == boss.BossSTATE_DEAD)
-	{
-		comp.Render(
-			c.GetViewMatrix(),
-			c.GetProjectionMatrix()
-			);
-	}
-	if (player.GetNowS() == player.STATE_DEAD)
-	{	
-		over.Render(
-		c.GetViewMatrix(),
-		c.GetProjectionMatrix()
-		);
-
-	}
-	
+	hpB.Render();
+	comp.Render();
+	over.Render();
+	lock2D.Render();
 }

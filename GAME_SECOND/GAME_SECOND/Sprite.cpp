@@ -2,11 +2,10 @@
 #include "Sprite.h"
 
 
-Sprite::Sprite()
-//texture(nullptr),
-//spriteEffect(nullptr)
+Sprite::Sprite():
+spriteEffect(nullptr)
 {
-
+	D3DXQuaternionIdentity(&rotation);
 }
 
 
@@ -84,12 +83,14 @@ void Sprite::Update()
 void Sprite::Render(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix)
 {
 	D3DXMATRIX m;
+	D3DXMatrixIdentity(&m);
 	D3DXVECTOR3 scale;
 	scale.x = size.x / WINDOW_WIDTH;
 	scale.y = size.y / WINDOW_HEIGHT;
 	scale.z = 1.0f;
 	D3DXMatrixScaling(&m, scale.x, scale.y, scale.z);
 	D3DXMATRIX trans;
+	D3DXMatrixIdentity(&trans);
 	D3DXVECTOR3 vectrans;
 	vectrans.x = position.x / (WINDOW_WIDTH / 2);
 	vectrans.y = position.y / (WINDOW_HEIGHT / 2);
@@ -102,11 +103,7 @@ void Sprite::Render(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix)
 	D3DXMatrixTranslation(&trans, vectrans.x, vectrans.y, vectrans.z);
 	D3DXMATRIX Rot;
 	D3DXMatrixInverse(&Rot, NULL, &viewMatrix);
-	Rot.m[3][0] = 0.0f;
-	Rot.m[3][1] = 0.0f;
-	Rot.m[3][2] = 0.0f;
-	Rot.m[3][3] = 1.0f;
-
+	D3DXMatrixRotationQuaternion(&Rot, &rotation);
 	m = m * Rot * trans * viewMatrix * projMatrix;
 	//アルファブレンディングを有効にする。
 	g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);

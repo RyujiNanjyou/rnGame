@@ -7,11 +7,26 @@ class Player;
 class PlayerCamera
 {
 public:
+	/*!
+	* @brief	コンストラクタ。
+	*/
 	PlayerCamera();
+	/*!
+	* @brief	デストラクタ。
+	*/
 	~PlayerCamera();
-	//追従したいものを引数に
+	/*!
+	*@brief	初期化。
+	*@param[in] player　カメラに追尾してほしいオブジェクトを指定
+	*/
 	void Start(Player* player);
+	/*!
+	*@brief	更新の前の更新。
+	*/
 	void PreUpdate();
+	/*!
+	*@brief	更新。
+	*/
 	void Update();
 	//カメラを取得。
 	const Camera& GetCamera() const

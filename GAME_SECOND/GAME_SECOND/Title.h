@@ -1,6 +1,9 @@
 #pragma once
 #include "Sprite.h"
 #include "Texture.h"
+/*!
+*@brief	タイトル。
+*/
 class Title 
 {
 public:
@@ -8,7 +11,7 @@ public:
 	~Title();
 	void Init() ;
 	void Update();
-	void Render(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix);
+	void Render();
 private:
 	Sprite title;
 
