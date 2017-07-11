@@ -133,13 +133,13 @@ bool Boss::Update()
 	GameObject::Update();
 	return true;
 }
-void Boss::Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)
+void Boss::Render(const D3DXMATRIX& viwe, const D3DXMATRIX& proj, bool ShadowFlag, bool isZPrepass)
 {
 	if (renderflag == true)
 	{
 		if (renderTime == 0)
 		{
-			GameObject::Render(viwe, proj, ShadowFlag);
+			GameObject::Render(viwe, proj, ShadowFlag, isZPrepass);
 			renderTime = 5;
 		}
 		renderTime--;
@@ -151,7 +151,7 @@ void Boss::Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)
 	}
 	else if (renderflag == false)
 	{
-		GameObject::Render(viwe, proj, ShadowFlag);
+		GameObject::Render(viwe, proj, ShadowFlag, isZPrepass);
 	}
 
 }

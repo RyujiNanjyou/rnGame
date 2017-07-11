@@ -11,14 +11,14 @@
 	*/
 	CKeyInput::CKeyInput()
 	{
-		memset(m_keyPressFlag, 0, sizeof(m_keyPressFlag));
-		memset(m_keyTrigerFlag, 0, sizeof(m_keyTrigerFlag));
-		m_mousePositionX = 0;
-		m_mousePositionY = 0;
-		m_isMouseUp[0] = false;
-		m_isMouseUp[1] = false;
+		memset(keyPressFlag, 0, sizeof(keyPressFlag));
+		memset(keyTrigerFlag, 0, sizeof(keyTrigerFlag));
+		mousePositionX = 0;
+		mousePositionY = 0;
+		isMouseUp[0] = false;
+		isMouseUp[1] = false;
 		int padNo = 0;
-		for (Pad& pad : m_pad) {
+		for (Pad& pad : pad) {
 			pad.Init(padNo);
 			padNo++;
 		}
@@ -34,54 +34,54 @@
 	*/
 	void CKeyInput::Update()
 	{
-		memset(m_keyTrigerFlag, 0, sizeof(m_keyTrigerFlag));
+		memset(keyTrigerFlag, 0, sizeof(keyTrigerFlag));
 		if (GetAsyncKeyState(VK_UP) & 0x8000) {
-			m_keyPressFlag[enKeyUp] = true;
+			keyPressFlag[enKeyUp] = true;
 		}
 		else {
-			m_keyPressFlag[enKeyUp] = false;
+			keyPressFlag[enKeyUp] = false;
 		}
 		if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
-			m_keyPressFlag[enKeyDown] = true;
+			keyPressFlag[enKeyDown] = true;
 		}
 		else {
-			m_keyPressFlag[enKeyDown] = false;
+			keyPressFlag[enKeyDown] = false;
 		}
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
-			m_keyPressFlag[enKeyRight] = true;
+			keyPressFlag[enKeyRight] = true;
 		}
 		else {
-			m_keyPressFlag[enKeyRight] = false;
+			keyPressFlag[enKeyRight] = false;
 		}
 		if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
-			m_keyPressFlag[enKeyLeft] = true;
+			keyPressFlag[enKeyLeft] = true;
 		}
 		else {
-			m_keyPressFlag[enKeyLeft] = false;
+			keyPressFlag[enKeyLeft] = false;
 		}
 		if ((GetAsyncKeyState('A') & 0x8000) | (GetAsyncKeyState('a') & 0x8000)) {
-			if (!m_keyPressFlag[enKeyA]) {
-				m_keyTrigerFlag[enKeyA] = true;
+			if (!keyPressFlag[enKeyA]) {
+				keyTrigerFlag[enKeyA] = true;
 			}
-			m_keyPressFlag[enKeyA] = true;
+			keyPressFlag[enKeyA] = true;
 		}
 		else {
-			m_keyPressFlag[enKeyA] = false;
+			keyPressFlag[enKeyA] = false;
 		}
 		if ((GetAsyncKeyState('B') & 0x8000) | (GetAsyncKeyState('b') & 0x8000)) {
-			if (!m_keyPressFlag[enKeyB]) {
-				m_keyTrigerFlag[enKeyB] = true;
+			if (!keyPressFlag[enKeyB]) {
+				keyTrigerFlag[enKeyB] = true;
 			}
-			m_keyPressFlag[enKeyB] = true;
+			keyPressFlag[enKeyB] = true;
 		}
 		else {
-			m_keyPressFlag[enKeyB] = false;
+			keyPressFlag[enKeyB] = false;
 		}
 		//バックバッファの内容をフロントバッファにコピー。
-		m_isMouseUp[0] = m_isMouseUp[1];
-		m_isMouseUp[1] = false;
+		isMouseUp[0] = isMouseUp[1];
+		isMouseUp[1] = false;
 
-		for (Pad& pad : m_pad) {
+		for (Pad& pad : pad) {
 			pad.Update();
 		}
 	}

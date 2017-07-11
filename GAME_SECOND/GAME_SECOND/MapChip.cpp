@@ -61,8 +61,8 @@ bool MapChip::Update()
 	
 	return true;
 }
-void MapChip::Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)
+void MapChip::Render(const D3DXMATRIX& viwe, const D3DXMATRIX& proj, bool ShadowFlag, bool isZPrepass)
 {
 	GameObject::Update();
-	GameObject::Render(viwe, proj, ShadowFlag);
+	GameObject::Render(viwe, proj, ShadowFlag,isZPrepass);
 }

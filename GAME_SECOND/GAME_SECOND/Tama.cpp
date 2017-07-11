@@ -14,7 +14,7 @@ Tama::~Tama()
 {
 	
 }
-void Tama::Shot(D3DXVECTOR3& pos, D3DXVECTOR3& direction)
+void Tama::Shot(const D3DXVECTOR3& pos, const D3DXVECTOR3& direction)
 {
 	
 	BaseTama::Shot(pos,direction);
@@ -48,7 +48,7 @@ bool Tama::Update()
 	characterController.Execute();
 	return true;
 }
-void Tama::Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)
+void Tama::Render(const D3DXMATRIX& viwe, const D3DXMATRIX& proj, bool ShadowFlag, bool isZPrepass)
 {
-	BaseTama::Render(viwe, proj, ShadowFlag);
+	BaseTama::Render(viwe, proj, ShadowFlag,isZPrepass);
 }

@@ -23,7 +23,7 @@ void PlayerStateDead::Update()
 {
 	if (player->isApplyDeadTrigger)
 	{
-			scenemanager->ChangeScene(scenemanager->Scenes::GAME);
+		scenemanager->ChangeScene(scenemanager->Scenes::GAME);
 			
 	}
 }

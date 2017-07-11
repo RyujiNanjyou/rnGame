@@ -183,28 +183,28 @@
 	{
 		this->position = position;
 		//コリジョン作成。
-		m_radius = radius;
-		m_height = height;							
-		m_collider.Create(radius, height);			//コライダークリエイト
+		this->radius = radius;
+		this->height = height;							
+		collider.Create(radius, height);			//コライダークリエイト
 		
 		//剛体を初期化。
 		RigidBodyInfo rbInfo;
-		rbInfo.collider = &m_collider;
+		rbInfo.collider = &collider;
 		rbInfo.mass = 0.0f;
-		m_rigidBody.Create(rbInfo);
-		btTransform& trans = m_rigidBody.GetBody()->getWorldTransform();
+		rigidBody.Create(rbInfo);
+		btTransform& trans = rigidBody.GetBody()->getWorldTransform();
 		//剛体の位置を更新。
 		trans.setOrigin(btVector3(position.x, position.y, position.z));
 		//@todo 未対応。trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
-		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
-		m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+		rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
+		rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 		//game->GetPhysicsWorld()->AddRigidBody(&m_rigidBody);
 
 	}
 		void CharacterController::Execute()
 	{
 		//速度に重力加速度を加える。
-		moveSpeed.y += m_gravity * 1.0f / 60.0f;
+		moveSpeed.y += gravity * 1.0f / 60.0f;
 		//次の移動先となる座標を計算する。
 		D3DXVECTOR3 nextPosition = position;
 		//速度からこのフレームでの移動量を求める。オイラー積分。
@@ -216,7 +216,7 @@
 		D3DXVec3Normalize(&originalXZDir, &originalXZDir);
 		//XZ平面での衝突検出と衝突解決を行う。
 		{
-			m_isKabe = false;
+			isKabe = false;
 			int loopCount = 0;
 			while (true) {
 				//現在の座標から次の移動先へ向かうベクトルを求める。
@@ -232,7 +232,7 @@
 				}
 				//カプセルコライダーの中心座標 + 0.2の座標をposTmpに求める。
 				D3DXVECTOR3 posTmp = position;
-				posTmp.y += m_height * 0.5f + m_radius + 0.2f;
+				posTmp.y += height * 0.5f + radius + 0.2f;
 				//レイを作成。
 				btTransform start, end;
 				start.setIdentity();
@@ -243,14 +243,14 @@
 				end.setOrigin(btVector3(nextPosition.x, posTmp.y, nextPosition.z));
 
 				SweepResultWall callback;
-				callback.me = m_rigidBody.GetBody();
+				callback.me = rigidBody.GetBody();
 				callback.startPos = posTmp;
 				//衝突検出。
-				game->GetPhysicsWorld()->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
+				game->GetPhysicsWorld()->ConvexSweepTest((const btConvexShape*)collider.GetBody(), start, end, callback);
 				if (callback.isHit) {
 					//当たった。
 					//壁。
-					m_isKabe = true;
+					isKabe = true;
 					hitCollisionObject = callback.hitCollisionObject;//壁のコリジョンオブジェクトと当たった。
 					D3DXVECTOR3 vT0, vT1;
 					//XZ平面上での移動後の座標をvT0に、交点の座標をvT1に設定する。
@@ -269,7 +269,7 @@
 					//押し返すベクトルは壁の法線に射影されためり込みベクトル+半径。
 					D3DXVECTOR3 vOffset;
 					vOffset = hitNormalXZ;
-					vOffset *= (-fT0 + m_radius);
+					vOffset *= (-fT0 + radius);
 					nextPosition += vOffset;
 					D3DXVECTOR3 currentDir;
 					currentDir = nextPosition - position;
@@ -299,7 +299,7 @@
 
 		//上方向を調べる。
 #if 1
-		m_isCeiling = false;
+		isCeiling = false;
 		{
 			D3DXVECTOR3 addPos(0.0f, 0.0f, 0.0f);
 			addPos = nextPosition - position;
@@ -313,18 +313,18 @@
 			if (addPos.y > 0.0f){
 				if (fabsf(addPos.y) > 0.0001f) {
 					end.setOrigin(btVector3(nextPosition.x, nextPosition.y, nextPosition.z));
-					callback.me = m_rigidBody.GetBody();
+					callback.me = rigidBody.GetBody();
 					callback.startPos = D3DXVECTOR3(btStart);
 					//衝突検出。
-					game->GetPhysicsWorld()->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
+					game->GetPhysicsWorld()->ConvexSweepTest((const btConvexShape*)collider.GetBody(), start, end, callback);
 				}
 				if (callback.isHit) {
 					//当たった。
 					//天井。
-					m_isCeiling = true;
+					isCeiling = true;
 					hitCollisionObject = callback.hitCollisionObject;
 					moveSpeed.y = 0.0f;
-					nextPosition.y = callback.hitPos.y - m_height;
+					nextPosition.y = callback.hitPos.y - height;
 				}
 			}
 		}
@@ -342,7 +342,7 @@
 				start.setIdentity();
 				end.setIdentity();
 				//始点はカプセルコライダーの中心。
-				start.setOrigin(btVector3(position.x, position.y + m_height * 0.5f + m_radius, position.z));
+				start.setOrigin(btVector3(position.x, position.y + height * 0.5f + radius, position.z));
 				//終点は地面上にいない場合は1m下を見る。
 				//地面上にいなくてジャンプで上昇中の場合は上昇量の0.01倍下を見る。
 				//地面上にいなくて降下中の場合はそのまま落下先を調べる。
@@ -351,11 +351,11 @@
 				endPos.y += addPos.y;
 				end.setOrigin(btVector3(endPos.x, endPos.y, endPos.z));
 				SweepResultGround callback;
-				callback.me = m_rigidBody.GetBody();
+				callback.me = rigidBody.GetBody();
 				callback.startPos = D3DXVECTOR3(start.getOrigin());
 				if (fabsf(start.getOrigin().y() - endPos.y) > 0.0f) {
 					//衝突検出。
-					game->GetPhysicsWorld()->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
+					game->GetPhysicsWorld()->ConvexSweepTest((const btConvexShape*)collider.GetBody(), start, end, callback);
 					
 					if (start.getOrigin().y() - end.getOrigin().y() > 0.001f)
 					{
@@ -363,13 +363,13 @@
 							//当たった。
 							hitCollisionObject = callback.hitCollisionObject;	//地面のコリジョンオブジェクトと当たった。
 							moveSpeed.y = 0.0f;
-							m_isJump = false;
-							m_isOnGround = true;
+							isJump = false;
+							isOnGround = true;
 							nextPosition.y = callback.hitPos.y;
 						}
 						else {
 							//地面上にいない。
-							m_isOnGround = false;
+							isOnGround = false;
 							//m_isJump = true;
 						}
 					}
@@ -380,7 +380,7 @@
 
 		//移動確定。
 		position = nextPosition;
-		btRigidBody* btBody = m_rigidBody.GetBody();
+		btRigidBody* btBody = rigidBody.GetBody();
 		//剛体を動かす。
 		btBody->setActivationState(DISABLE_DEACTIVATION);
 		btTransform& trans = btBody->getWorldTransform();
@@ -393,5 +393,5 @@
 	*/
 	void CharacterController::RemoveRigidBoby()
 	{
-		game->GetPhysicsWorld()->RemoveRigidBody(&m_rigidBody);
+		game->GetPhysicsWorld()->RemoveRigidBody(&rigidBody);
 	}

@@ -38,7 +38,7 @@ public:
 	/*!
 	*@brief	描画。
 	*/
-	void Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)override;
+	void  Render(const D3DXMATRIX& viwe, const D3DXMATRIX& proj, bool ShadowFlag, bool isZPrepass) override;
 	/*!
 	*@brief	ロックオンできるか。
 	*/
@@ -53,12 +53,12 @@ public:
 	/*!
 	*@brief	状態の取得。
 	*/
-	EnemyS GetnowEnemyS(){ return nowEnemyS; }
+	EnemyS GetnowEnemyS()const { return nowEnemyS; }
 	/*!
 	*@brief	死亡フラグの取得。
 	*/
-	bool GetDeathflag(){ return deathflag; }
-	float GetHeight() { return height; }
+	bool GetDeathflag()const { return deathflag; }
+	float GetHeight()const  { return height; }
 private:
 	EnemyS nowEnemyS;
 	int hp = 2;

@@ -14,10 +14,18 @@ public:
 	void Update();
 	void Render();
 private:
-	Title t;
+	enum Title_State
+	{
+		state_Run,
+		state_FadeOut
+	};
+
+	Title title2D;
 	std::unique_ptr<SoundSource> titlese;
 	SoundSource titlebgm;
 	float atime = 0.0f;
 	float deltaTime = 1.0f / 60.0f;
+
+	Title_State state = state_Run;
 };
 

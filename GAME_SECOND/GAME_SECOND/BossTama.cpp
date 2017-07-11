@@ -12,7 +12,7 @@ BossTama::~BossTama()
 {
 
 }
-void BossTama::Shot(D3DXVECTOR3& pos, D3DXVECTOR3& direction)
+void BossTama::Shot(const D3DXVECTOR3& pos, const D3DXVECTOR3& direction)
 {
 	BaseTama::Shot(pos, direction);
 }
@@ -50,7 +50,7 @@ bool BossTama::Update()
 	characterController.Execute();
 	return true;
 }
-void BossTama::Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)
+void BossTama::Render(const D3DXMATRIX& viwe, const D3DXMATRIX& proj, bool ShadowFlag, bool isZPrepass)
 {
-	BaseTama::Render(viwe, proj, ShadowFlag);
+	BaseTama::Render(viwe, proj, ShadowFlag,isZPrepass);
 }

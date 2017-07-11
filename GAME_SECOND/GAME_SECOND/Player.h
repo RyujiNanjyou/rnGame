@@ -54,7 +54,7 @@ public:
 	*@param[in] proj		プロジェクション行列
 	*@param[in] ShadowFlag	影を落とすかのフラグ
 	*/
-	void Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)override;
+	void Render(const D3DXMATRIX& viwe, const D3DXMATRIX& proj, bool ShadowFlag, bool isZPrepass) override;
 	/*!
 	*@brief	状態の更新
 	*/
@@ -87,15 +87,15 @@ public:
 	/*!
 	*@brief	弾の撃つ処理。
 	*/
-	void ShotPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 forward);
+	void ShotPlayer( D3DXVECTOR3& pos, const D3DXVECTOR3& forward);
 	/*!
 	*@brief	向きの取得。
 	*/
-	D3DXVECTOR3	Getforward() { return forward; }
+	const D3DXVECTOR3&	Getforward() const { return forward; }
 	/*!
 	*@brief	ヒットポイントの取得。
 	*/
-	int Gethp(){ return hp; }
+	int Gethp()const{ return hp; }
 	/*!
 	*@brief	最大ヒットポイントの取得。
 	*/
@@ -103,11 +103,11 @@ public:
 	/*!
 	*@brief	ダメージフラグの取得。
 	*/
-	bool GetisDamage() { return isDamage; }
+	bool GetisDamage()const { return isDamage; }
 	/*!
 	*@brief	今の状態の取得。
 	*/
-	NowState GetNowS() { return state; }
+	NowState GetNowS()const { return state; }
 
 private:
 	friend class	PlayerStateRun;
@@ -134,6 +134,7 @@ private:
 	Enemy*							lockOnEnemy = NULL;								//ロックオンできる敵
 	LPDIRECT3DTEXTURE9				normalMap = skinmodel.GetNormal();				//<!ノーマルマップ。
 	LPDIRECT3DTEXTURE9				specularMap = skinmodel.GetSpec();				//<!スペキュラマップ。
+	LPDIRECT3DTEXTURE9				darkTex;
 	int								intervalTime = 0;								//クールタイム
 	int								shotintervalTime = 0;							//攻撃クールタイム
 	int								damageTime = 0;									//ダメージクールタイム

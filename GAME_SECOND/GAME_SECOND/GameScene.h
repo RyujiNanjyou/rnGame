@@ -92,25 +92,25 @@ public:
 	/*!
 	* @brief	プレイヤーが放った弾のリストを取得。
 	*/
-	const std::vector<Tama*>& GetPlayerTama()
+	const std::vector<Tama*>& GetPlayerTama() const
 	{
 		return playertama;
 	}
 	/*!
 	* @brief	ボスが放った弾のリストを取得
 	*/
-	const std::vector<BossTama*>& GetBossTama()
+	const std::vector<BossTama*>& GetBossTama() const
 	{
 		return bosstama;
 	}
 	/*!
 	* @brief	エネミーが放った弾のリストを取得
 	*/
-	const std::vector<EnemyTama*>& GetEnemyTama()
+	const std::vector<EnemyTama*>& GetEnemyTama() const
 	{
 		return enemytama;
 	}
-	LockOn2D* GetlockOn() { return &lock2D; }
+	LockOn2D* GetlockOn()  { return &lock2D; }
 private:
 	Bloom					bloom;//ブルーム
 	Map						map;//マップ

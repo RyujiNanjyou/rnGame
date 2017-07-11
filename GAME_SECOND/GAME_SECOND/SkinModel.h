@@ -24,7 +24,7 @@ public:
 	/*!
 	*@brief	描画。
 	*/
-	void Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix, bool isDrawToShadowMap);
+	void Draw(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix, bool isDrawToShadowMap, bool isZPrepass);
 	/*!
 	*@brief	ワールド行列を更新。
 	*@details
@@ -40,29 +40,33 @@ public:
 		LPD3DXMESHCONTAINER pMeshContainerBase,
 		LPD3DXFRAME pFrameBase,
 		ID3DXEffect* pEffect,
-		D3DXMATRIX* worldMatrix,
-		D3DXMATRIX* rotationMatrix,
-		D3DXMATRIX* viewMatrix,
-		D3DXMATRIX* projMatrix,
+		const D3DXMATRIX&worldMatrix,
+		const D3DXMATRIX& rotationMatrix,
+		const D3DXMATRIX& viewMatrix,
+		const D3DXMATRIX&projMatrix,
 		Light* light,
 		LPDIRECT3DTEXTURE9	normalMap,
 		LPDIRECT3DTEXTURE9 specularMap,
-		bool isDrawToShadowMap
-		);
+		LPDIRECT3DTEXTURE9 darkTex,
+		bool isDrawToShadowMap,
+		bool isZPrepass
+	);
 
 	void DrawFrame(
 		IDirect3DDevice9* pd3dDevice,
 		LPD3DXFRAME pFrame,
 		ID3DXEffect* pEffect,
-		D3DXMATRIX* worldMatrix,
-		D3DXMATRIX* rotationMatrix,
-		D3DXMATRIX* viewMatrix,
-		D3DXMATRIX* projMatrix,
+		const D3DXMATRIX& worldMatrix,
+		const D3DXMATRIX& rotationMatrix,
+		const D3DXMATRIX& viewMatrix,
+		const D3DXMATRIX& projMatrix,
 		Light* light,
 		LPDIRECT3DTEXTURE9	normalMap,
 		LPDIRECT3DTEXTURE9 specularMap,
-		bool isDrawToShadowMap
-		);
+		LPDIRECT3DTEXTURE9 darkTex,
+		bool isDrawToShadowMap,
+		bool isZPrepass
+	);
 	/*!
 	*@brief	ライトを設定。
 	*/
@@ -89,6 +93,10 @@ public:
 	{
 		isSpecularMap = flag;
 	}
+	void SetDarkTextuerflag(bool flag)
+	{
+		isDarkTextuer = flag;
+	}
 	ID3DXEffect* GetEffect()
 	{
 		return pEffect;
@@ -97,11 +105,11 @@ public:
 	{
 		pEffect = effect;
 	}
-	D3DXMATRIX Getworld()
+	const D3DXMATRIX Getworld()const
 	{
 		return worldMatrix;
 	}
-	D3DXMATRIX& GetRot()
+	const D3DXMATRIX& GetRot() const
 	{
 		return rotationMatrix;
 	}
@@ -123,13 +131,25 @@ public:
 	{
 		specularMap = specMap;
 	}
-	LPDIRECT3DTEXTURE9 GetNormal() 
+	/*!
+	* @brief	ダークテクスチャセット。
+	*/
+	void SetDarkTextuer(LPDIRECT3DTEXTURE9 specMap)
+	{
+		darkTex = specMap;
+	}
+	LPDIRECT3DTEXTURE9 GetNormal() const
 	{
 		return normalMap;
 	}
-	LPDIRECT3DTEXTURE9 GetSpec()
+	LPDIRECT3DTEXTURE9 GetSpec() const
 	{
 		return specularMap;
+	}
+
+	LPDIRECT3DTEXTURE9 GetDarkTextuer() const
+	{
+		return darkTex;
 	}
 private:
 	D3DXMATRIX			worldMatrix;			//!<ワールド行列。
@@ -142,6 +162,8 @@ private:
 	bool				isDrawToShadowMap;
 	bool				isNormalMap;			//<!ノーマルマップフラグ
 	bool				isSpecularMap;		//<!スペキュラマップフラグ
+	bool				isDarkTextuer;
 	LPDIRECT3DTEXTURE9	normalMap = NULL;				//<!ノーマルマップ。
 	LPDIRECT3DTEXTURE9  specularMap = NULL;				//<!スペキュラマップ。
+	LPDIRECT3DTEXTURE9  darkTex = NULL;
 };

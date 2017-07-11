@@ -42,15 +42,15 @@ public:
 	/*!
 	* @brief ライト作成
 	*/
-	void CreateLight(D3DXMATRIX);
+	void CreateLight(const D3DXMATRIX&);
 	/*!
 	* @brief	描画
 	*@param[in]　viewMatrix　ビュー行列
 	*@param[in]　projMatrix　プロジェクション行列
 	*/
 	void Render(
-		D3DXMATRIX* viewMatrix,
-		D3DXMATRIX* projMatrix
+		const D3DXMATRIX& viewMatrix,
+		const D3DXMATRIX& projMatrix
 		);
 	/*!
 	* @brief	開放
@@ -59,13 +59,13 @@ public:
 	/*!
 	* @brief	レンダーターゲットの取得
 	*/
-	RenderTarget* GetRenderTarget(){
+	RenderTarget* GetRenderTarget() {
 		return &rendertarget;
 	}
 	/*!
 	* @brief	ライトビュープロジェクションの取得
 	*/
-	D3DXMATRIX Getlvpmatrix()
+	D3DXMATRIX Getlvpmatrix()const 
 	{
 		return LVPMatrix;
 	}

@@ -10,6 +10,8 @@ EffectManager*			effectmanager = NULL;
 
 
 extern void Init();
+//extern void ZPrepass();
+//extern void RenderScene();
 extern void Render();
 extern void Update();
 extern void Terminate();

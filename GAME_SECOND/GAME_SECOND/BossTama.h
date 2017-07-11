@@ -27,13 +27,13 @@ public:
 	*@param[in] pos			撃つ場所
 	*@param[in] direction　	撃つ向き
 	*/
-	void Shot(D3DXVECTOR3& pos, D3DXVECTOR3& direction);
+	void Shot(const D3DXVECTOR3& pos, const D3DXVECTOR3& direction);
 	/*!
 	*@brief	描画。
 	*@param[in] viwe		ビュー行列
 	*@param[in] proj		プロジェクション行列
 	*@param[in] ShadowFlag	影を落とすかのフラグ
 	*/
-	void Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag) override;
+	void Render(const D3DXMATRIX& viwe, const D3DXMATRIX& proj, bool ShadowFlag, bool isZPrepass) override;
 };
 

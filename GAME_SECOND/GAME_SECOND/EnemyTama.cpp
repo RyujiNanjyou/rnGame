@@ -50,7 +50,7 @@ bool EnemyTama::Update()
 	characterController.Execute();
 	return true;
 }
-void EnemyTama::Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)
+void EnemyTama::Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag, bool isZPrepass)
 {
-	BaseTama::Render(viwe, proj, ShadowFlag);
+	BaseTama::Render(viwe, proj, ShadowFlag,isZPrepass);
 }

@@ -36,6 +36,6 @@ public:
 	*@param[in] proj		プロジェクション行列
 	*@param[in] ShadowFlag	影を落とすかのフラグ
 	*/
-	void Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag);
+	void Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag, bool isZPrepass);
 };
 

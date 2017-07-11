@@ -38,7 +38,7 @@ public:
 	*@param[in] proj		プロジェクション行列
 	*@param[in] ShadowFlag	影を落とすかのフラグ
 	*/
-	virtual void Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag);
+	virtual void Render(const D3DXMATRIX& viwe, const D3DXMATRIX& proj, bool ShadowFlag, bool isZPrepass);
 	/*!
 	*@brief	開放。
 	*/
@@ -46,36 +46,36 @@ public:
 	/*!
 	*@brief	回転の設定。
 	*/
-	void Setrot(D3DXQUATERNION rot)
+	void Setrot(const D3DXQUATERNION& rot)
 	{
 		rotation = rot;
 	}
 	/*!
 	*@brief	拡大の設定。
 	*/
-	void Setscale(D3DXVECTOR3 scale)
+	void Setscale(const D3DXVECTOR3& scale)
 	{
 		this->scale = scale;
 	}
 	/*!
 	*@brief	座標の設定。
 	*/
-	void Setpos(D3DXVECTOR3 pos)
+	void Setpos(const D3DXVECTOR3& pos)
 	{
 		position = pos;
 	}
 	/*!
 	*@brief	座標の取得。
 	*/
-	D3DXVECTOR3 Getpos() const { return position; }
+	const D3DXVECTOR3& Getpos() const { return position; }
 	/*!
 	*@brief	回転の取得。
 	*/
-	D3DXQUATERNION Getrot()const { return rotation; }
+	const D3DXQUATERNION& Getrot()const { return rotation; }
 	/*!
 	*@brief	拡大の取得。
 	*/
-	D3DXVECTOR3 Getscale()const { return scale; }
+	const D3DXVECTOR3& Getscale()const { return scale; }
 protected: 
 	CharacterController     characterController;	//キャラクタコントローラ。
 	ID3DXEffect*			effect;					//エフェクト。

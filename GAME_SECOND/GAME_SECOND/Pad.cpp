@@ -58,148 +58,148 @@ namespace {
 	};
 }
 Pad::Pad() :
-m_padNo(0)
+padNo(0)
 {
-	memset(&m_state, 0, sizeof(m_state));
-	memset(m_trigger, 0, sizeof(m_trigger));
-	memset(m_press, 0, sizeof(m_press));
-	m_lStickX = 0.0f;
-	m_lStickY = 0.0f;
-	m_rStickX = 0.0f;
-	m_rStickY = 0.0f;
+	memset(&state, 0, sizeof(state));
+	memset(trigger, 0, sizeof(trigger));
+	memset(press, 0, sizeof(press));
+	lStickX = 0.0f;
+	lStickY = 0.0f;
+	rStickX = 0.0f;
+	rStickY = 0.0f;
 }
 Pad::~Pad()
 {
 }
 void Pad::Update()
 {
-	DWORD result = XInputGetState(m_padNo, &m_state.state);
+	DWORD result = XInputGetState(padNo, &state.state);
 	if (result == ERROR_SUCCESS) {
 		//接続されている。
 		padflag = true;
-		m_state.bConnected = padflag;
+		state.bConnected = padflag;
 		for (const VirtualPadToXPad& vPadToXPad : vPadToXPadTable) {
-			if (m_state.state.Gamepad.wButtons & vPadToXPad.xButton) {
-				m_trigger[vPadToXPad.vButton] = 1 ^ m_press[vPadToXPad.vButton];
-				m_press[vPadToXPad.vButton] = 1;
+			if (state.state.Gamepad.wButtons & vPadToXPad.xButton) {
+				trigger[vPadToXPad.vButton] = 1 ^ press[vPadToXPad.vButton];
+				press[vPadToXPad.vButton] = 1;
 			}
 			else {
-				m_trigger[vPadToXPad.vButton] = 0;
-				m_press[vPadToXPad.vButton] = 0;
+				trigger[vPadToXPad.vButton] = 0;
+				press[vPadToXPad.vButton] = 0;
 			}
 		}
-		if ((m_state.state.Gamepad.sThumbLX < INPUT_DEADZONE &&
-			m_state.state.Gamepad.sThumbLX > -INPUT_DEADZONE) &&
-			(m_state.state.Gamepad.sThumbLY < INPUT_DEADZONE &&
-			m_state.state.Gamepad.sThumbLY > -INPUT_DEADZONE))
+		if ((state.state.Gamepad.sThumbLX < INPUT_DEADZONE &&
+			state.state.Gamepad.sThumbLX > -INPUT_DEADZONE) &&
+			(state.state.Gamepad.sThumbLY < INPUT_DEADZONE &&
+			state.state.Gamepad.sThumbLY > -INPUT_DEADZONE))
 		{
-			m_state.state.Gamepad.sThumbLX = 0;
-			m_state.state.Gamepad.sThumbLY = 0;
-			m_lStickX = 0.0f;
-			m_lStickY = 0.0f;
+			state.state.Gamepad.sThumbLX = 0;
+			state.state.Gamepad.sThumbLY = 0;
+			lStickX = 0.0f;
+			lStickY = 0.0f;
 		}
 		else {
 			//左スティックの入力量。
-			if (m_state.state.Gamepad.sThumbLX > 0) {
-				m_lStickX = s_cast<float>(m_state.state.Gamepad.sThumbLX) / SHRT_MAX;
+			if (state.state.Gamepad.sThumbLX > 0) {
+				lStickX = s_cast<float>(state.state.Gamepad.sThumbLX) / SHRT_MAX;
 			}
 			else {
-				m_lStickX = s_cast<float>(m_state.state.Gamepad.sThumbLX) / -SHRT_MIN;
+				lStickX = s_cast<float>(state.state.Gamepad.sThumbLX) / -SHRT_MIN;
 			}
-			if (m_state.state.Gamepad.sThumbLY > 0) {
-				m_lStickY = s_cast<float>(m_state.state.Gamepad.sThumbLY) / SHRT_MAX;
+			if (state.state.Gamepad.sThumbLY > 0) {
+				lStickY = s_cast<float>(state.state.Gamepad.sThumbLY) / SHRT_MAX;
 			}
 			else {
-				m_lStickY = s_cast<float>(m_state.state.Gamepad.sThumbLY) / -SHRT_MIN;
+				lStickY = s_cast<float>(state.state.Gamepad.sThumbLY) / -SHRT_MIN;
 			}
 		}
 
-		if ((m_state.state.Gamepad.sThumbRX < INPUT_DEADZONE &&
-			m_state.state.Gamepad.sThumbRX > -INPUT_DEADZONE) &&
-			(m_state.state.Gamepad.sThumbRY < INPUT_DEADZONE &&
-			m_state.state.Gamepad.sThumbRY > -INPUT_DEADZONE))
+		if ((state.state.Gamepad.sThumbRX < INPUT_DEADZONE &&
+			state.state.Gamepad.sThumbRX > -INPUT_DEADZONE) &&
+			(state.state.Gamepad.sThumbRY < INPUT_DEADZONE &&
+			state.state.Gamepad.sThumbRY > -INPUT_DEADZONE))
 		{
-			m_state.state.Gamepad.sThumbRX = 0;
-			m_state.state.Gamepad.sThumbRY = 0;
-			m_rStickX = 0.0f;
-			m_rStickY = 0.0f;
+			state.state.Gamepad.sThumbRX = 0;
+			state.state.Gamepad.sThumbRY = 0;
+			rStickX = 0.0f;
+			rStickY = 0.0f;
 		}
 		else {
 			//右スティックの入力量。
-			if (m_state.state.Gamepad.sThumbRX > 0) {
-				m_rStickX = s_cast<float>(m_state.state.Gamepad.sThumbRX) / SHRT_MAX;
+			if (state.state.Gamepad.sThumbRX > 0) {
+				rStickX = s_cast<float>(state.state.Gamepad.sThumbRX) / SHRT_MAX;
 			}
 			else {
-				m_rStickX = s_cast<float>(m_state.state.Gamepad.sThumbRX) / -SHRT_MIN;
+				rStickX = s_cast<float>(state.state.Gamepad.sThumbRX) / -SHRT_MIN;
 			}
-			if (m_state.state.Gamepad.sThumbRY > 0) {
-				m_rStickY = s_cast<float>(m_state.state.Gamepad.sThumbRY) / SHRT_MAX;
+			if (state.state.Gamepad.sThumbRY > 0) {
+				rStickY = s_cast<float>(state.state.Gamepad.sThumbRY) / SHRT_MAX;
 			}
 			else {
-				m_rStickY = s_cast<float>(m_state.state.Gamepad.sThumbRY) / -SHRT_MIN;
+				rStickY = s_cast<float>(state.state.Gamepad.sThumbRY) / -SHRT_MIN;
 			}
 		}
 	}
 	else {
 		//接続されていない。
-		if (m_state.bConnected) {
+		if (state.bConnected) {
 			//未接続になった。
-			memset(&m_state, 0, sizeof(m_state));
-			memset(m_trigger, 0, sizeof(m_trigger));
-			memset(m_press, 0, sizeof(m_press));
+			memset(&state, 0, sizeof(state));
+			memset(trigger, 0, sizeof(trigger));
+			memset(press, 0, sizeof(press));
 			padflag = false;
 		}
-		m_lStickX = 0.0f;
-		m_lStickY = 0.0f;
-		m_rStickX = 0.0f;
-		m_rStickY = 0.0f;
+		lStickX = 0.0f;
+		lStickY = 0.0f;
+		rStickX = 0.0f;
+		rStickY = 0.0f;
 
 		if (GetAsyncKeyState(VK_LEFT)) {
-			m_rStickX = -1.0f;
+			rStickX = -1.0f;
 		}
 		else if (GetAsyncKeyState(VK_RIGHT)) {
-			m_rStickX = 1.0f;
+			rStickX = 1.0f;
 		}
 		if (GetAsyncKeyState(VK_UP)) {
-			m_rStickY = 1.0f;
+			rStickY = 1.0f;
 		}
 		else if (GetAsyncKeyState(VK_DOWN)) {
-			m_rStickY = -1.0f;
+			rStickY = -1.0f;
 		}
 		//スティックの入力量を正規化。
-		float t = fabsf(m_rStickX) + fabsf(m_rStickY);
+		float t = fabsf(rStickX) + fabsf(rStickY);
 		if (t > 0.0f) {
-			m_rStickX /= t;
-			m_rStickY /= t;
+			rStickX /= t;
+			rStickY /= t;
 		}
 
 		if (GetAsyncKeyState('A')) {
-			m_lStickX = -1.0f;
+			lStickX = -1.0f;
 		}
 		else if (GetAsyncKeyState('D')) {
-			m_lStickX = 1.0f;
+			lStickX = 1.0f;
 		}
 		if (GetAsyncKeyState('W')) {
-			m_lStickY = 1.0f;
+			lStickY = 1.0f;
 		}
 		else if (GetAsyncKeyState('S')) {
-			m_lStickY = -1.0f;
+			lStickY = -1.0f;
 		}
 		//スティックの入力量を正規化。
-		t = fabsf(m_lStickX) + fabsf(m_lStickY);
+		t = fabsf(lStickX) + fabsf(lStickY);
 		if (t > 0.0f) {
-			m_lStickX /= t;
-			m_lStickY /= t;
+			lStickX /= t;
+			lStickY /= t;
 		}
 
 		for (const VirtualPadToKeyboard& vPadToKeyboard : vPadToKeyboardTable) {
 			if (GetAsyncKeyState(vPadToKeyboard.keyCoord)) {
-				m_trigger[vPadToKeyboard.vButton] = 1 ^ m_press[vPadToKeyboard.vButton];
-				m_press[vPadToKeyboard.vButton] = 1;
+				trigger[vPadToKeyboard.vButton] = 1 ^ press[vPadToKeyboard.vButton];
+				press[vPadToKeyboard.vButton] = 1;
 			}
 			else {
-				m_trigger[vPadToKeyboard.vButton] = 0;
-				m_press[vPadToKeyboard.vButton] = 0;
+				trigger[vPadToKeyboard.vButton] = 0;
+				press[vPadToKeyboard.vButton] = 0;
 			}
 		}
 	}

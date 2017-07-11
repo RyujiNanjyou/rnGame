@@ -28,8 +28,8 @@ void ShadowMap::Create(int w, int h)
 
 
 void ShadowMap::Render(
-	D3DXMATRIX* viewMatrix,
-	D3DXMATRIX* projMatrix
+	const D3DXMATRIX& viewMatrix,
+	const D3DXMATRIX& projMatrix
 	)
 {
 	g_pd3dDevice->GetViewport(&viewport);
@@ -50,31 +50,31 @@ void ShadowMap::Render(
 	g_pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	D3DXMatrixOrthoLH(&ProjMatrix,20,20, Near, Far);
 	CreateLight(ProjMatrix);
-	game->GetPlayer()->Render(lvMatrix, ProjMatrix, true);
+	game->GetPlayer()->Render(lvMatrix, ProjMatrix, true, false);
 	for (auto enemy : game->GetEnemyManager()->GetEnemy())
 	{
 		if (enemy->GetDeathflag() == true)
 		{
-			enemy->Render(lvMatrix, ProjMatrix, true);
+			enemy->Render(lvMatrix, ProjMatrix, true, false);
 		}
 	}
-	game->GetBoss()->Render(lvMatrix, ProjMatrix, true);
+	game->GetBoss()->Render(lvMatrix, ProjMatrix, true, false);
 	for (auto tama : game->GetPlayerTama())
 	{
 		
-		tama->Render(lvMatrix, ProjMatrix, true);
+		tama->Render(lvMatrix, ProjMatrix, true, false);
 		
 	}
 	for (auto tama : game->GetEnemyTama())
 	{
 		
-		tama->Render(lvMatrix, ProjMatrix, true);
+		tama->Render(lvMatrix, ProjMatrix, true, false);
 		
 	}
 	for (auto tama : game->GetBossTama())
 	{
 	
-		tama->Render(lvMatrix, ProjMatrix, true);
+		tama->Render(lvMatrix, ProjMatrix, true, false);
 		
 	}
 
@@ -85,7 +85,7 @@ void ShadowMap::Render(
 	shadow = rendertarget.GetTexture();
 }
 
-void ShadowMap::CreateLight(D3DXMATRIX proj)
+void ShadowMap::CreateLight(const D3DXMATRIX& proj)
 {
 	D3DXVECTOR3 lightUp;
 	float t = fabsf(D3DXVec3Dot(&lightdir, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)));

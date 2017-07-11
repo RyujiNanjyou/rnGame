@@ -26,6 +26,7 @@ GameScene::~GameScene()
 void GameScene::Init()
 {
 	game = this;
+	
 	//•¨—ƒ[ƒ‹ƒh‚ð‰Šú‰»B
 	physics.Init();
 	camera2D.Init();
@@ -55,6 +56,7 @@ void GameScene::Init()
 void GameScene::Update()
 {
 	camera2D.Update();
+	
 	hpB.Update();
 	comp.Update();
 	over.Update();
@@ -119,18 +121,20 @@ void GameScene::Update()
 void GameScene::Render()
 {
 	shadow.Render(
-		&GetCamera().GetViewMatrix(),
-		&GetCamera().GetProjectionMatrix()
+		GetCamera().GetViewMatrix(),
+		GetCamera().GetProjectionMatrix()
 		);
 	
 	player.Render(
 		GetCamera().GetViewMatrix(),
 		GetCamera().GetProjectionMatrix(),
+		false,
 		false
 		);
 	boss.Render(
 		GetCamera().GetViewMatrix(),
 		GetCamera().GetProjectionMatrix(),
+		false,
 		false
 		);
 	enemy.Render(g_pd3dDevice,
@@ -156,6 +160,7 @@ void GameScene::Render()
 		tama->Render(
 			GetCamera().GetViewMatrix(),
 			GetCamera().GetProjectionMatrix(),
+			false,
 			false
 			);
 	}
@@ -164,6 +169,7 @@ void GameScene::Render()
 		tama->Render(
 			GetCamera().GetViewMatrix(),
 			GetCamera().GetProjectionMatrix(),
+			false,
 			false
 			);
 	}
@@ -172,6 +178,7 @@ void GameScene::Render()
 		tama->Render(
 			GetCamera().GetViewMatrix(),
 			GetCamera().GetProjectionMatrix(),
+			false,
 			false
 			);
 	}
@@ -180,4 +187,5 @@ void GameScene::Render()
 	comp.Render();
 	over.Render();
 	lock2D.Render();
+	
 }

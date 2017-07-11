@@ -39,33 +39,39 @@ void Player::Init(LPDIRECT3DDEVICE9 pd3dDevice, const char* Name)
 {
 	
 	D3DXCreateTextureFromFileA(pd3dDevice,
-		"Assets/utc_nomal.tga",
+		"Assets/Model/utc_nomal.tga",
 		&normalMap
-		);
+	);
 	D3DXCreateTextureFromFileA(pd3dDevice,
-		"Assets/utc_spec.tga",
+		"Assets/Model/utc_spec.tga",
 		&specularMap
-		);
+	);
+	D3DXCreateTextureFromFileA(pd3dDevice,
+		"Assets/Model/utc_all2_dark.png",
+		&darkTex
+	);
 	GameObject::Init(pd3dDevice, Name);
 
 	if (normalMap != NULL) {
 		//法線マップの読み込みが成功したので、SkinModelに法線マップを設定する。
 		skinmodel.SetNormalMap(normalMap);
 		skinmodel.SetNormalMapflag(true);
-
 	}
 	if (specularMap != NULL) {
 		//スペキュラマップの読み込みが成功したので、SkinModelにスペキュラマップを設定する。
 		skinmodel.SetSpecularMap(specularMap);
 		skinmodel.SetSpecularMapflag(true);
-
+	}
+	if (darkTex != NULL) {
+		skinmodel.SetDarkTextuer(darkTex);
+		skinmodel.SetDarkTextuerflag(true);
 	}
 	PlayAnimation(INVALID, 0.0f);
 	ChangeState(STATE_IDOL);
 	anim.SetAnimationEndTime(RUN, 0.8f);
 	anim.SetAnimationLoopFlag(JUMP, false);
 	anim.PlayAnimation(IDOL);
-	position = D3DXVECTOR3(bosspos);//bosspos,originpos
+	position = D3DXVECTOR3(originpos);//bosspos,originpos
 	rotation = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
 	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	D3DXVECTOR3 pos = position;
@@ -234,7 +240,7 @@ void Player::ChangeState(NowState nexstate)
 }
 
 
-void Player::ShotPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 forward)
+void Player::ShotPlayer( D3DXVECTOR3& pos, const D3DXVECTOR3& forward)
 {
 	
 	if (shotintervalTime == 0)
@@ -356,13 +362,13 @@ bool Player::Update()
 	lastFrameState = state;
 	return true;
 }
-void Player::Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)
+void Player::Render(const D3DXMATRIX& viwe, const D3DXMATRIX& proj, bool ShadowFlag, bool isZPrepass)
 {
 	if (renderflag == true)
 	{
 		if (damageTime == 0)
 		{
-			GameObject::Render(viwe, proj, ShadowFlag);
+			GameObject::Render(viwe, proj, ShadowFlag,isZPrepass);
 			damageTime = 5;
 		}
 		damageTime--;
@@ -374,7 +380,7 @@ void Player::Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)
 	}
 	else if (renderflag == false)
 	{
-		GameObject::Render(viwe, proj, ShadowFlag);
+		GameObject::Render(viwe, proj, ShadowFlag,isZPrepass);
 	}
 	
 }

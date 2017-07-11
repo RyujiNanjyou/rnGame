@@ -16,7 +16,7 @@ BaseTama::~BaseTama()
 {
 
 }
-void BaseTama::Shot(D3DXVECTOR3& pos, D3DXVECTOR3& direction)
+void BaseTama::Shot(const D3DXVECTOR3& pos, const D3DXVECTOR3& direction)
 {
 
 	position = pos;
@@ -39,8 +39,8 @@ void BaseTama::Init(LPDIRECT3DDEVICE9 pd3dDevice, const char* Name)
 	characterController.Init(radius, height, pos);
 	characterController.SetGravity(0.0f);
 }
-void BaseTama::Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)
+void BaseTama::Render(const D3DXMATRIX& viwe, const D3DXMATRIX& proj, bool ShadowFlag,bool isZPrepass)
 {
 	GameObject::Update();
-	GameObject::Render(viwe, proj, ShadowFlag);
+	GameObject::Render(viwe, proj, ShadowFlag,isZPrepass);
 }

@@ -7,10 +7,6 @@
 */
 class Light
 {
-	
-	D3DXVECTOR4 			diffuseLightDirection[LIGHT_NUM];	//ライトの方向。
-	D3DXVECTOR4				diffuseLightColor[LIGHT_NUM];		//ライトの色。
-	D3DXVECTOR4				ambientLight;						//環境光
 public:
 	/*!
 	* @brief	コンストラクタ。
@@ -64,4 +60,9 @@ public:
 	*/
 	void SetDLColor(int n, D3DXVECTOR4 a) { diffuseLightColor[n] = a; }
 	
+private:
+
+	D3DXVECTOR4 			diffuseLightDirection[LIGHT_NUM];	//ライトの方向。
+	D3DXVECTOR4				diffuseLightColor[LIGHT_NUM];		//ライトの色。
+	D3DXVECTOR4				ambientLight;						//環境光
 };

@@ -136,8 +136,8 @@ bool Enemy::Update()
 	
 	return true;
 }
-void Enemy::Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)
+void Enemy::Render(const D3DXMATRIX& viwe, const D3DXMATRIX& proj, bool ShadowFlag,bool isZPrepass)
 {
 	GameObject::Update();
-	GameObject::Render(viwe, proj, ShadowFlag);
+	GameObject::Render(viwe, proj, ShadowFlag,isZPrepass);
 }

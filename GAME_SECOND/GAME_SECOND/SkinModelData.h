@@ -49,11 +49,11 @@ public:
 	* @brief	ÉäÉäÅ[ÉXÅB
 	*/
 	void Release();
-	LPD3DXFRAME GetFrameRoot()
+	LPD3DXFRAME GetFrameRoot()const
 	{
 		return frameRoot;
 	}
-	ID3DXAnimationController* GetAnimationController()
+	ID3DXAnimationController* GetAnimationController() const 
 	{
 		return pAnimController;
 	}

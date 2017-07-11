@@ -16,14 +16,16 @@ void SkinModel::DrawMeshContainer(
 	LPD3DXMESHCONTAINER pMeshContainerBase,
 	LPD3DXFRAME pFrameBase,
 	ID3DXEffect* pEffect,
-	D3DXMATRIX* worldMatrix,
-	D3DXMATRIX* rotationMatrix,
-	D3DXMATRIX* viewMatrix,
-	D3DXMATRIX* projMatrix,
+	const D3DXMATRIX&worldMatrix,
+	const D3DXMATRIX& rotationMatrix,
+	const D3DXMATRIX& viewMatrix,
+	const D3DXMATRIX&projMatrix,
 	Light* light,
-	LPDIRECT3DTEXTURE9 normal,
+	LPDIRECT3DTEXTURE9	normalMap,
 	LPDIRECT3DTEXTURE9 specularMap,
-	bool isDrawToShadowMap
+	LPDIRECT3DTEXTURE9 darkTex,
+	bool isDrawToShadowMap,
+	bool isZPrepass
 	)
 {
 	D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
@@ -35,7 +37,7 @@ void SkinModel::DrawMeshContainer(
 	D3DCAPS9 d3dCaps;
 	pd3dDevice->GetDeviceCaps(&d3dCaps);
 	D3DXMATRIX viewProj;
-	D3DXMatrixMultiply(&viewProj, viewMatrix, projMatrix);
+	D3DXMatrixMultiply(&viewProj, &viewMatrix, &projMatrix);
 	if (pMeshContainer->pSkinInfo != NULL) {
 		//顔以外のモデルの描画
 		if (isDrawToShadowMap == TRUE)
@@ -68,13 +70,13 @@ void SkinModel::DrawMeshContainer(
 	//定数レジスタに設定するカラー。
 	D3DXVECTOR4 color(1.0f, 0.0f, 0.0f, 1.0f);
 	//ワールド行列の転送。
-	pEffect->SetMatrix("g_worldMatrix", worldMatrix);
+	pEffect->SetMatrix("g_worldMatrix", &worldMatrix);
 	//ビュー行列の転送。
-	pEffect->SetMatrix("g_viewMatrix", viewMatrix);
+	pEffect->SetMatrix("g_viewMatrix", &viewMatrix);
 	//プロジェクション行列の転送。
-	pEffect->SetMatrix("g_projectionMatrix", projMatrix);
+	pEffect->SetMatrix("g_projectionMatrix", &projMatrix);
 	//回転行列を転送。
-	pEffect->SetMatrix("g_rotationMatrix", rotationMatrix);
+	pEffect->SetMatrix("g_rotationMatrix", &rotationMatrix);
 	//ライトの向きを転送。
 	pEffect->SetVectorArray("g_diffuseLightDirection", &light->GetDLDirecton(), LIGHT_NUM);
 	////ライトのカラーを転送。
@@ -82,8 +84,9 @@ void SkinModel::DrawMeshContainer(
 	////環境光を設定。
 	pEffect->SetVector("g_ambientLight",&light->Getamb());
 	//影のフラグを転送。
-	//StageでフラグをTRUEにしている
 	pEffect->SetInt("g_ShadowReceiverFlag", ShadowReceiverFlag);
+	//Zプリパスのフラグ転送。
+	pEffect->SetInt("g_ZPrepassFlag",isZPrepass);
 	//ライトビュープロジェクション行列の転送。
 	pEffect->SetMatrix("g_mLVP", &LVP);
 	//ビュープロジェクション。
@@ -106,10 +109,10 @@ void SkinModel::DrawMeshContainer(
 			);
 		if (isNormalMap == true)
 		{
-			if (normal != NULL)
+			if (normalMap != NULL)
 			{
 				//法線マップがある場合
-				pEffect->SetTexture("g_normalTexture", normal);
+				pEffect->SetTexture("g_normalTexture", normalMap);
 				pEffect->SetInt("g_hasNormalMap", isNormalMap);
 			}
 		}
@@ -133,6 +136,23 @@ void SkinModel::DrawMeshContainer(
 			//スペキュラマップのあり、なしのフラグをfalseにする。
 			pEffect->SetTexture("g_specularTexture", NULL);
 			pEffect->SetInt("g_isHasSpecularMap", isSpecularMap);
+		}
+
+		if (isDarkTextuer == true)
+		{
+			
+			if (darkTex != NULL) {
+				//ダークテクスチャがありので、シェーダーに転送する。
+				pEffect->SetTexture("g_darkTexture", darkTex);
+				//ダークテクスチャのあり、なしのフラグをtrueにする。
+				pEffect->SetInt("g_isHasDarkTexture", isDarkTextuer);
+			}
+		}
+		else
+		{
+			//ダークテクスチャのあり、なしのフラグをfalseにする。
+			pEffect->SetTexture("g_darkTexture", NULL);
+			pEffect->SetInt("g_isHasDarkTexture", isDarkTextuer);
 		}
 
 		if (pMeshContainer->pSkinInfo != NULL)
@@ -165,7 +185,7 @@ void SkinModel::DrawMeshContainer(
 				// ボーン数。
 				pEffect->SetInt("CurNumBones", pMeshContainer->NumInfl - 1);
 				D3DXMATRIX viewRotInv;
-				D3DXMatrixInverse(&viewRotInv, NULL, viewMatrix);
+				D3DXMatrixInverse(&viewRotInv, NULL, &viewMatrix);
 				viewRotInv.m[3][0] = 0.0f;
 				viewRotInv.m[3][1] = 0.0f;
 				viewRotInv.m[3][2] = 0.0f;
@@ -190,11 +210,11 @@ void SkinModel::DrawMeshContainer(
 				mWorld = pFrame->CombinedTransformationMatrix;
 			}
 			else {
-				mWorld = * worldMatrix;
+				mWorld = worldMatrix;
 			}
 
 			pEffect->SetMatrix("g_worldMatrix", &mWorld);
-			pEffect->SetMatrix("g_rotationMatrix", rotationMatrix);
+			pEffect->SetMatrix("g_rotationMatrix", &rotationMatrix);
 			pEffect->Begin(0, D3DXFX_DONOTSAVESTATE);
 			pEffect->BeginPass(0);
 			for (DWORD i = 0; i < pMeshContainer->NumMaterials; i++) {
@@ -214,14 +234,16 @@ void SkinModel::DrawFrame(
 	IDirect3DDevice9* pd3dDevice,
 	LPD3DXFRAME pFrame,
 	ID3DXEffect* pEffect,
-	D3DXMATRIX* worldMatrix,
-	D3DXMATRIX* rotationMatrix,
-	D3DXMATRIX* viewMatrix,
-	D3DXMATRIX* projMatrix,
+	const D3DXMATRIX& worldMatrix,
+	const D3DXMATRIX& rotationMatrix,
+	const D3DXMATRIX& viewMatrix,
+	const D3DXMATRIX& projMatrix,
 	Light* light,
-	LPDIRECT3DTEXTURE9 normal,
+	LPDIRECT3DTEXTURE9	normalMap,
 	LPDIRECT3DTEXTURE9 specularMap,
-	bool isDrawToShadowMap
+	LPDIRECT3DTEXTURE9 darkTex,
+	bool isDrawToShadowMap,
+	bool isZPrepass
 	)
 {
 	LPD3DXMESHCONTAINER pMeshContainer;
@@ -239,9 +261,11 @@ void SkinModel::DrawFrame(
 			viewMatrix,
 			projMatrix,
 			light,
-			normal,
+			normalMap,
 			specularMap,
-			isDrawToShadowMap
+			darkTex,
+			isDrawToShadowMap,
+			isZPrepass
 			);
 
 		pMeshContainer = pMeshContainer->pNextMeshContainer;
@@ -258,9 +282,11 @@ void SkinModel::DrawFrame(
 			viewMatrix,
 			projMatrix,
 			light,
-			normal,
+			normalMap,
 			specularMap,
-			isDrawToShadowMap
+			darkTex,
+			isDrawToShadowMap,
+			isZPrepass
 			);
 	}
 
@@ -275,9 +301,11 @@ void SkinModel::DrawFrame(
 			viewMatrix,
 			projMatrix,
 			light,
-			normal,
+			normalMap,
 			specularMap,
-			isDrawToShadowMap
+			darkTex,
+			isDrawToShadowMap,
+			isZPrepass
 			);
 	}
 }
@@ -313,7 +341,7 @@ void SkinModel::UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION
 	}
 }
 
-void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix, bool isDrawToShadowMap)
+void SkinModel::Draw(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix, bool isDrawToShadowMap,  bool isZPrepass)
 {
 	if (skinModelData)
 	{
@@ -321,14 +349,16 @@ void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix, bool isDraw
 			g_pd3dDevice,
 			skinModelData->GetFrameRoot(),
 			pEffect,
-			&worldMatrix,
-			&rotationMatrix,
+			worldMatrix,
+			rotationMatrix,
 			viewMatrix,
 			projMatrix,
 			light,
 			normalMap,
 			specularMap,
-			isDrawToShadowMap
+			darkTex,
+			isDrawToShadowMap,
+			isZPrepass
 			);
 	}
 }

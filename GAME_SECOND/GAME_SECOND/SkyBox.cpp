@@ -39,5 +39,5 @@ void SkyBox::Update()
 
 void SkyBox::Render()
 {
-	skinmodel.Draw(&game->GetGameCamera().GetCamera().GetViewMatrix(), &game->GetGameCamera().GetCamera().GetProjectionMatrix(), false);
+	skinmodel.Draw(game->GetGameCamera().GetCamera().GetViewMatrix(), game->GetGameCamera().GetCamera().GetProjectionMatrix(), false,false);
 }

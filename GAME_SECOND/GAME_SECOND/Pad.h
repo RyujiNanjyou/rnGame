@@ -52,7 +52,7 @@ public:
 	*/
 	void Init(int padNo)
 	{
-		m_padNo = padNo;
+		padNo = padNo;
 	}
 	/*!
 	*@brief	更新。
@@ -65,7 +65,7 @@ public:
 	bool IsTrigger(EnButton button) const
 	{
 		//TK_ASSERT(button < enButtonNum, "button is invalid");
-		return m_trigger[button] != 0;
+		return trigger[button] != 0;
 	}
 	/*!
 	*@brief	ボタンが押されているか判定。
@@ -74,7 +74,7 @@ public:
 	bool IsPress(EnButton button) const
 	{
 		//TK_ASSERT(button < enButtonNum, "button is invalid");
-		return m_press[button] != 0;
+		return press[button] != 0;
 	}
 	/*!
 	*@brief	左スティックのX軸の入力量を取得。
@@ -82,7 +82,7 @@ public:
 	*/
 	float GetLStickXF() const
 	{
-		return m_lStickX;
+		return lStickX;
 	}
 	/*!
 	*@brief	左スティックのY軸の入力量を取得。
@@ -90,7 +90,7 @@ public:
 	*/
 	float GetLStickYF() const
 	{
-		return m_lStickY;
+		return lStickY;
 	}
 	/*!
 	*@brief	右スティックのX軸の入力量を取得。
@@ -98,7 +98,7 @@ public:
 	*/
 	float GetRStickXF() const
 	{
-		return m_rStickX;
+		return rStickX;
 	}
 	/*!
 	*@brief	右スティックのY軸の入力量を取得。
@@ -106,18 +106,18 @@ public:
 	*/
 	float GetRStickYF() const
 	{
-		return m_rStickY;
+		return rStickY;
 	}
 	bool Getf(){ return padflag; }
 	void Setf(bool f){ padflag = f; }
 private:
-	PAD_STATE m_state;	//!<パッドステート。
-	int m_padNo;		//!<パッド番号。
-	int m_trigger[enButtonNum];	//!<トリガー入力のフラグ。
-	int m_press[enButtonNum];	//!<press入力のフラグ。
-	float m_lStickX;			//!<左スティックのX軸の入力量。
-	float m_lStickY;			//!<左スティックのY軸の入力量。
-	float m_rStickX;			//!<右スティックのX軸の入力量。
-	float m_rStickY;			//!<右スティックのY軸の入力量。
+	PAD_STATE state;	//!<パッドステート。
+	int padNo;		//!<パッド番号。
+	int trigger[enButtonNum];	//!<トリガー入力のフラグ。
+	int press[enButtonNum];	//!<press入力のフラグ。
+	float lStickX;			//!<左スティックのX軸の入力量。
+	float lStickY;			//!<左スティックのY軸の入力量。
+	float rStickX;			//!<右スティックのX軸の入力量。
+	float rStickY;			//!<右スティックのY軸の入力量。
 	bool padflag;
 };

@@ -72,11 +72,11 @@ void EnemyManager::Update()
 }
 
 void EnemyManager::Render(LPDIRECT3DDEVICE9 pd3dDevice,
-	D3DXMATRIX viewMatrix,
-	D3DXMATRIX projMatrix,
-	const D3DXVECTOR4 diffuseLightDirection,
-	const D3DXVECTOR4 diffuseLightColor,
-	D3DXVECTOR4	 ambientLight,
+	const D3DXMATRIX& viewMatrix,
+	const D3DXMATRIX& projMatrix,
+	const D3DXVECTOR4& diffuseLightDirection,
+	const D3DXVECTOR4& diffuseLightColor,
+	const D3DXVECTOR4& ambientLight,
 	int lightnum)
 {
 	for (auto& enemyChip : enemyChipList)
@@ -85,7 +85,7 @@ void EnemyManager::Render(LPDIRECT3DDEVICE9 pd3dDevice,
 		{
 			if (enemyChip->GetDeathflag() == true)
 			{
-				enemyChip->Render(viewMatrix, projMatrix, false);
+				enemyChip->Render(viewMatrix, projMatrix, false,false);
 			}
 		}
 
@@ -96,7 +96,7 @@ void EnemyManager::Render(LPDIRECT3DDEVICE9 pd3dDevice,
 			{
 				if (enemyChip->GetDeathflag() == true)
 				{
-					enemyChip->Render(viewMatrix, projMatrix, false);
+					enemyChip->Render(viewMatrix, projMatrix, false,false);
 				}
 				damageEffectTime = 5;
 				

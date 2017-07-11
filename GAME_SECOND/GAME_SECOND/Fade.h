@@ -27,7 +27,7 @@ public:
 	* ポストエフェクトの後で実行されます。HUDなどポストエフェクトの影響を受けたくない描画物はここでレンダリングしてください。
 	*@param[in]		renderContext		レンダリングコンテキスト。
 	*/
-	void PostRender(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix) ;
+	void PostRender() ;
 	/*!
 	*@brief	フェードの処理を実行中？。
 	*@return フェードイン、フェードアウトを実行中はtrueを返します。
@@ -77,3 +77,4 @@ private:
 	bool        activeFlag = false;
 };
 
+extern Fade* fade;

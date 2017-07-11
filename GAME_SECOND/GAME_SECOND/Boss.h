@@ -40,7 +40,7 @@ public:
 	*@param[in] proj		プロジェクション行列
 	*@param[in] ShadowFlag	影を落とすかのフラグ
 	*/
-	void Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag) override;
+	void Render(const D3DXMATRIX& viwe, const D3DXMATRIX& proj, bool ShadowFlag, bool isZPrepass) override;
 	/*!
 	*@brief	ダメージ処理。
 	*/
@@ -52,11 +52,11 @@ public:
 	/*!
 	*@brief	ヒットポイント取得。
 	*/
-	int Gethp(){ return hp; }
+	int Gethp() const { return hp; }
 	/*!
 	*@brief	最大ヒットポイント取得。
 	*/
-	int Getmaxhp(){ return maxhp; }
+	int Getmaxhp()const{ return maxhp; }
 	/*!
 	*@brief	ボスの状態の取得。
 	*/

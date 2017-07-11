@@ -14,10 +14,8 @@ Fade::~Fade()
 bool Fade::Start()
 {
 	
-	//sprite.Init();
-	/*sprite.Setsize({
-		static_cast<float>(WINDOW_WIDTH),
-		static_cast<float>(WINDOW_HEIGHT) });*/
+	sprite.Init("Assets//Model/Fade,png");
+	sprite.Setsize(D3DXVECTOR2(WINDOW_WIDTH, WINDOW_HEIGHT));
 	activeFlag = false;
 	sprite.Setalpha(0.0f);
 	return true;
@@ -53,7 +51,9 @@ void Fade::Update()
 		}
 	}
 }
-void Fade::PostRender(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix)
+void Fade::PostRender()
 {
-	sprite.Render(viewMatrix,projMatrix);
+	D3DXMATRIX identity;
+	D3DXMatrixIdentity(&identity);
+	sprite.Render(identity, identity);
 }

@@ -15,7 +15,7 @@ public:
 	~MapChip();
 	void Init(LPDIRECT3DDEVICE9 pd3dDevice, const char* Name) override;
 	bool Update() override;
-	void Render(D3DXMATRIX viwe, D3DXMATRIX proj, bool ShadowFlag)override;
+	void Render(const D3DXMATRIX& viwe, const D3DXMATRIX& proj, bool ShadowFlag, bool isZPrepass)override;
 	
 	
 private:

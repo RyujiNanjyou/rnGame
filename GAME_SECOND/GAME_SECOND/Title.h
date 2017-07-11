@@ -13,7 +13,6 @@ public:
 	void Update();
 	void Render();
 private:
-	Sprite title;
-
+	Sprite title;//ƒ^ƒCƒgƒ‹‚QD
 };
 

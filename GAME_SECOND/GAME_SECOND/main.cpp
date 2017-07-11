@@ -4,14 +4,17 @@
 #include "GameScene.h"
 #include "SceneManager.h"
 #include "SoundEngine.h"
+#include "Fade.h"
 //-----------------------------------------------------------------------------
 // グローバル変数。
 //-----------------------------------------------------------------------------
-GameScene* game;
-SceneManager* scenemanager;
-RenderTarget* rendertarget;
-SoundEngine* soundengine;
-Primitive*	quadPrimitive;			//四角形の板ポリプリミティブ。
+GameScene* game = NULL;
+Fade*	   fade = NULL;
+SceneManager* scenemanager = NULL;
+RenderTarget* rendertarget = NULL;
+RenderTarget  depthBuffer;
+SoundEngine* soundengine = NULL;
+Primitive*	quadPrimitive = NULL;			//四角形の板ポリプリミティブ。
 LPD3DXEFFECT copyEffect;			//コピーを行うシェーダー。
 LPD3DXEFFECT monochromeEffect;		//モノクロフィルターをかけるシェーダー。
 //-----------------------------------------------------------------------------
@@ -56,6 +59,16 @@ void InitMainRenderTarget()
 		D3DMULTISAMPLE_NONE,		//マルチサンプリングの種類。今回はマルチサンプリングは行わないのでD3DMULTISAMPLE_NONEでいい。
 		0							//マルチサンプリングの品質レベル。今回はマルチサンプリングは行わないので0でいい。
 		);
+
+	depthBuffer.Create(
+		WINDOW_WIDTH,
+		WINDOW_HEIGHT,
+		1,
+		D3DFMT_A16B16G16R16F,
+		D3DFMT_D24S8,
+		D3DMULTISAMPLE_NONMASKABLE,
+		0
+	);
 }
 //-----------------------------------------------------------------------------
 // Name:板ポリの初期化。
@@ -203,6 +216,7 @@ void Init()
 	LoadShaders();
 
 	game = new GameScene;
+	fade = new Fade;
 
 	scenemanager = new SceneManager;
 	scenemanager->InitializeScene();
@@ -218,10 +232,33 @@ void Update()
 	scenemanager->UpdateScene();
 	soundengine->Update();
 }
+void ZPrepass()
+{
+	g_pd3dDevice->SetRenderTarget(
+		1,									//何番目のレンダリングターゲットを設定するかの引数。今回は0でいい。
+		depthBuffer.GetRenderTarget()	//変更するレンダリングターゲット。
+	);
+
+	
+}
+void RenderScene()
+{
+	g_pd3dDevice->SetRenderTarget(
+		0,									//何番目のレンダリングターゲットを設定するかの引数。今回は0でいい。
+		rendertarget->GetRenderTarget()	//変更するレンダリングターゲット。
+	);
+	// デプスステンシルバッファも変更する。
+	g_pd3dDevice->SetDepthStencilSurface(rendertarget->GetDepthStencilBuffer());
+	// レンダリングターゲットをクリア。
+	g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
+	//modelを描画。
+	scenemanager->RenderScene();
+	
+}
 //-----------------------------------------------------------------------------
 // Name: 描画処理。
 //-----------------------------------------------------------------------------
-VOID Render()
+void Render()
 {
 	//シーンの描画開始。
 	g_pd3dDevice->BeginScene();
@@ -231,19 +268,11 @@ VOID Render()
 	g_pd3dDevice->GetRenderTarget(0, &frameBufferRT);		//元々のレンダリングターゲットを保存。後で戻す必要があるので。
 	g_pd3dDevice->GetDepthStencilSurface(&frameBufferDS);	//元々のデプスステンシルバッファを保存。後で戻す必要があるので。
 	 //レンダリングターゲットをフレームバッファから変更する。
-	g_pd3dDevice->SetRenderTarget(
-		0,									//何番目のレンダリングターゲットを設定するかの引数。今回は0でいい。
-		rendertarget->GetRenderTarget()	//変更するレンダリングターゲット。
-		);
-	 //デプスステンシルバッファも変更する。
-	g_pd3dDevice->SetDepthStencilSurface(rendertarget->GetDepthStencilBuffer());
-	 //レンダリングターゲットをクリア。
-	g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
-	//modelを描画。
 	
-	scenemanager->RenderScene();
+	//ZPrepass();
 
-
+	RenderScene();
+	
 	//シーンの描画が完了したのでレンダリングターゲットをフレームバッファに戻す。
 	g_pd3dDevice->SetRenderTarget(0, frameBufferRT);
 	g_pd3dDevice->SetDepthStencilSurface(frameBufferDS);
@@ -268,6 +297,7 @@ void Terminate()
 	rendertarget->Release();
 	delete scenemanager;
 	delete game;
+	delete fade;
 	delete rendertarget;
 	delete quadPrimitive;
 	

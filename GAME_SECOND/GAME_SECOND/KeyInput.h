@@ -36,72 +36,72 @@
 		*/
 		bool IsUpPress() const
 		{
-			return m_keyPressFlag[enKeyUp];
+			return keyPressFlag[enKeyUp];
 		}
 		/*!
 		* @brief	右キーが押されている。
 		*/
 		bool IsRightPress() const
 		{
-			return m_keyPressFlag[enKeyRight];
+			return keyPressFlag[enKeyRight];
 		}
 		/*!
 		* @brief	左キーが押されている。
 		*/
 		bool IsLeftPress() const
 		{
-			return m_keyPressFlag[enKeyLeft];
+			return keyPressFlag[enKeyLeft];
 		}
 		/*!
 		* @brief	下キーが押されている。
 		*/
 		bool IsDownPress() const
 		{
-			return m_keyPressFlag[enKeyDown];
+			return keyPressFlag[enKeyDown];
 		}
 		/*!
 		* @brief	キーのプレス判定。
 		*/
 		bool IsPress(EnKey key) const
 		{
-			return m_keyPressFlag[key];
+			return keyPressFlag[key];
 		}
 		/*!
 		* @brief	キーのトリガー判定。
 		*/
 		bool IsTrgger(EnKey key) const
 		{
-			return m_keyTrigerFlag[key];
+			return keyTrigerFlag[key];
 		}
 		/*!
 		* @brief	マウスの左ボタンが離されたときの処理。
 		*/
 		void OnMouseLButtonUp(int x, int y)
 		{
-			m_mousePositionX = x;
-			m_mousePositionY = y;
-			m_isMouseUp[1] = true;
+			mousePositionX = x;
+			mousePositionY = y;
+			isMouseUp[1] = true;
 		}
 		/*!
 		* @brief	マウスの左ボタンが離されたときか判定。
 		*/
 		bool IsMouseLButtonUp() const
 		{
-			return m_isMouseUp[0];
+			return isMouseUp[0];
 		}
 		/*!
 		* @brief	マウスのX座標を取得。
 		*/
 		int GetMousePositionX() const
 		{
-			return m_mousePositionX;
+			return mousePositionX;
 		}
 		/*!
 		* @brief	マウスのY座標を取得。
 		*/
 		int GetMousePositionY() const
 		{
-			return m_mousePositionY;
+			return mousePositionY;
 		}
 		/*!
 		* @brief	ゲームパッドを取得。
@@ -109,15 +109,15 @@
 		const Pad& GetPad(int padNo) const
 		{
 			//TK_ASSERT(padNo < NUM_PAD, "padNo is invalid");
-			return m_pad[padNo];
+			return pad[padNo];
 		}
 	private:
-		bool	m_keyPressFlag[enKeyNum];
-		bool	m_keyTrigerFlag[enKeyNum];
-		bool	m_isMouseUp[2];
-		int		m_mousePositionX;
-		int		m_mousePositionY;
-		Pad	m_pad[NUM_PAD];		//!<パッド。
+		bool	keyPressFlag[enKeyNum];
+		bool	keyTrigerFlag[enKeyNum];
+		bool	isMouseUp[2];
+		int		mousePositionX;
+		int		mousePositionY;
+		Pad		pad[NUM_PAD];		//!<パッド。
 	};
 
 #endif //_TKKEYINPUT_H_ 
