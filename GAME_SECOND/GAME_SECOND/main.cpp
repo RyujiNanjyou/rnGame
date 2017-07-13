@@ -232,6 +232,7 @@ void Update()
 	scenemanager->UpdateScene();
 	soundengine->Update();
 }
+
 void ZPrepass()
 {
 	g_pd3dDevice->SetRenderTarget(
